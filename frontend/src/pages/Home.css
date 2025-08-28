@@ -1,99 +1,98 @@
 .container {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  padding: 50px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  padding: 60px 10px;
   background-color: #f8f7f2;
-  text-align: center;
+  min-height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
 }
-.card { border: 2px solid red; }
 
 .heading {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 500;
   color: #3e3263;
-  margin-bottom: 50px;
+  text-align: center;
+  margin-bottom: 60px;
 }
 
+/* GRID */
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto;
-  gap: 20px;
-  max-width: 1200px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(180px, auto);
+  gap: 24px;
+  max-width: 1400px;
   margin: 0 auto;
-  
-  /* Layout adjustments for specific cards */
   grid-template-areas:
-    "orange green pink"
-    "blue green purple"
-    "blue beige purple"
-    "darkBlue lightBlue beige";
+    "orange green pink purple"
+    "lightBlue green pink purple"
+    "lightBlue darkBlue beige purple";
 }
 
-/* Card-specific grid placement */
-/* .orangeCard { grid-area: orange; }
+.orangeCard { grid-area: orange; }
 .greenCard { grid-area: green; }
 .pinkCard { grid-area: pink; }
 .purpleCard { grid-area: purple; }
-.lightBlueCard { grid-area: lightBlue; }
 .darkBlueCard { grid-area: darkBlue; }
-.beigeCard { grid-area: beige; } */
-
+.lightBlueCard { grid-area: lightBlue; }
+.beigeCard { grid-area: beige; }
 
 .card {
   border-radius: 12px;
-  padding: 30px;
-  text-align: left;
+  padding: 24px;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-/* Color styles for each card */
-.orangeCard { background-color: #f7e0d3; color: #3e3263; border: 1px solid #f0d5c2; }
-.greenCard { background-color: #d1f3e0; color: #3e3263; border: 1px solid #c2e9d2; }
-.pinkCard { background-color: #fbe0f3; color: #3e3263; border: 1px solid #f2d5ec; }
-.purpleCard { background-color: #d3d3f5; color: #3e3263; border: 1px solid #c8c8ec; }
-.darkBlueCard { background-color: #e0f2f7; color: #3e3263; border: 1px solid #d5e5f0; }
-.lightBlueCard { background-color: #e6e6f5; color: #3e3263; text-align: center; border: 1px solid #d5d5ec; }
-.beigeCard { background-color: #f1ebd8; color: #3e3263; text-align: center; border: 1px solid #e0d5c2; }
+/* Color styles */
+.orangeCard { background: #f7e0d3; border: 1px solid #f0d5c2; }
+.greenCard { background: #d1f3e0; border: 1px solid #c2e9d2; }
+.pinkCard { background: #fbe0f3; border: 1px solid #f2d5ec; }
+.purpleCard { background: #d3d3f5; border: 1px solid #c8c8ec; }
+.darkBlueCard { background: #e0f2f7; border: 1px solid #d5e5f0; }
+.lightBlueCard { background: #e6e6f5; border: 1px solid #d5d5ec; text-align: center; }
+.beigeCard { background: #f1ebd8; border: 1px solid #e0d5c2; text-align: center; }
 
-/* Card Content and Text */
-.cardContent { margin-bottom: 20px; }
-.quote { font-size: 1.1rem; line-height: 1.6; }
-.author { font-weight: bold; margin-top: 15px; }
-.role { font-size: 0.9rem; color: #555; }
-.caseStudyTag { font-size: 0.8rem; font-weight: bold; color: #5e5e5e; }
+/* Text */
+.quote { font-size: 1rem; line-height: 1.6; }
+.author { font-weight: bold; margin-top: 12px; color: #3e3263; }
+.role { font-size: 0.85rem; color: #555; }
+.caseStudyTag { font-size: 0.75rem; font-weight: bold; color: #5e5e5e; }
 .readMore { font-size: 0.9rem; color: #4a90e2; font-weight: bold; cursor: pointer; }
-.cardText { font-size: 1.2rem; line-height: 1.5; font-weight: 500; }
-.largeNumber { font-size: 4rem; font-weight: bold; color: #3e3263; margin-bottom: 5px; }
+.cardText { font-size: 1.1rem; line-height: 1.5; font-weight: 500; }
+.largeNumber { font-size: 3rem; font-weight: bold; color: #3e3263; margin-bottom: 6px; }
 .authorInfo { margin-top: auto; }
 
-/* Flexbox for card header alignment */
+/* Card Header */
 .cardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .logoPlaceholder {
   margin-top: auto;
-  padding-top: 20px;
+  padding-top: 16px;
 }
 
 .logo {
-  max-width: 100px;
+  max-width: 80px;
   height: auto;
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
+/* Responsive */
+@media (max-width: 1200px) {
   .cardGrid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-areas: unset; /* Reset grid areas for a simpler layout */
+    grid-template-areas: none;
   }
+  .card { grid-area: unset; }
 }
 
 @media (max-width: 768px) {
@@ -101,3 +100,161 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+/* Q1 Specific Styles */
+.q1Card {
+  background: #f7e0d3;
+  border: 1px solid #f0d5c2;
+}
+
+.q1Content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.q1Text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #3e3263;
+  margin-bottom: 16px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.q1Button {
+  background-color: #3e3263;
+  color: white;
+  font-size: 0.95rem;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: all 0.3s ease;
+}
+
+.q1Button:hover {
+  background-color: #5a4791;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.q1Card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.q2Card {
+  background-color: #d4fbe5;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 0 auto; /* remove vertical spacing */
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.q2Card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.q2Content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* spacing between text & button */
+}
+
+.q2Title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+  color: #145a32;
+}
+
+.q2Text {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+  text-align: justify;
+}
+
+.q2Button {
+  align-self: flex-start;
+  padding: 10px 20px;
+  background-color: #28a745; /* green button */
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.q2Button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+
+
+/* Card 3 Specific */
+.q3Card {
+  background-color: #ffd6eb;  /* light pink */
+  border-radius: 12px;
+  padding: 20px;
+  margin: 0; /* remove space */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.q3Card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.q3Card .q3Header {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #b6005c; /* darker pink */
+}
+
+.q3Card .q3Text {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.q3Card .q3ButtonWrapper {
+  margin-top: 15px;
+  text-align: left;
+}
+
+.q3Card .q3Button {
+  background-color: #b6005c;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.q3Card .q3Button:hover {
+  background-color: #8a0047;
+}
+
+
+/* q4 effects */
+
