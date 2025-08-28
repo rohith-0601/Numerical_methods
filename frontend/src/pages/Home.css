@@ -1,0 +1,103 @@
+.container {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding: 50px 20px;
+  background-color: #f8f7f2;
+  text-align: center;
+}
+.card { border: 2px solid red; }
+
+.heading {
+  font-size: 3rem;
+  font-weight: 500;
+  color: #3e3263;
+  margin-bottom: 50px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  /* Layout adjustments for specific cards */
+  grid-template-areas:
+    "orange green pink"
+    "blue green purple"
+    "blue beige purple"
+    "darkBlue lightBlue beige";
+}
+
+/* Card-specific grid placement */
+/* .orangeCard { grid-area: orange; }
+.greenCard { grid-area: green; }
+.pinkCard { grid-area: pink; }
+.purpleCard { grid-area: purple; }
+.lightBlueCard { grid-area: lightBlue; }
+.darkBlueCard { grid-area: darkBlue; }
+.beigeCard { grid-area: beige; } */
+
+
+.card {
+  border-radius: 12px;
+  padding: 30px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Color styles for each card */
+.orangeCard { background-color: #f7e0d3; color: #3e3263; border: 1px solid #f0d5c2; }
+.greenCard { background-color: #d1f3e0; color: #3e3263; border: 1px solid #c2e9d2; }
+.pinkCard { background-color: #fbe0f3; color: #3e3263; border: 1px solid #f2d5ec; }
+.purpleCard { background-color: #d3d3f5; color: #3e3263; border: 1px solid #c8c8ec; }
+.darkBlueCard { background-color: #e0f2f7; color: #3e3263; border: 1px solid #d5e5f0; }
+.lightBlueCard { background-color: #e6e6f5; color: #3e3263; text-align: center; border: 1px solid #d5d5ec; }
+.beigeCard { background-color: #f1ebd8; color: #3e3263; text-align: center; border: 1px solid #e0d5c2; }
+
+/* Card Content and Text */
+.cardContent { margin-bottom: 20px; }
+.quote { font-size: 1.1rem; line-height: 1.6; }
+.author { font-weight: bold; margin-top: 15px; }
+.role { font-size: 0.9rem; color: #555; }
+.caseStudyTag { font-size: 0.8rem; font-weight: bold; color: #5e5e5e; }
+.readMore { font-size: 0.9rem; color: #4a90e2; font-weight: bold; cursor: pointer; }
+.cardText { font-size: 1.2rem; line-height: 1.5; font-weight: 500; }
+.largeNumber { font-size: 4rem; font-weight: bold; color: #3e3263; margin-bottom: 5px; }
+.authorInfo { margin-top: auto; }
+
+/* Flexbox for card header alignment */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.logoPlaceholder {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.logo {
+  max-width: 100px;
+  height: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: unset; /* Reset grid areas for a simpler layout */
+  }
+}
+
+@media (max-width: 768px) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+}
