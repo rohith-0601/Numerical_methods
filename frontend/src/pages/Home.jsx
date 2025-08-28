@@ -6,118 +6,102 @@ function HomePage() {
     <div className="container">
       <h1 className="heading">Prime Numbers Assignment </h1>
       <div className="cardGrid">
-        {/* Card 1 */}
-        <div className="card orangeCard q1Card">
-          <div className="cardContent q1Content">
+
+        {/* Question 1 */}
+        <div className="card q1Card orangeCard">
+          <div className="q1Content">
             <h3 className="q1Title">Question 1</h3>
-            <p className="quote q1Text">
-              A prime number is <b>12345678910987654321</b>. Here n is 10.
-              <br />
-              Find the next number that follows this pattern.
-              <br />
-              That number n lies between 1000 and 3000.
-              <br />
+            <p className="q1Text">
+              A prime number is <b>12345678910987654321</b>. Here n is 10.<br/>
+              Find the next number that follows this pattern.<br/>
+              That number n lies between 1000 and 3000.<br/>
               This was discovered by an <b>Indian</b>.
             </p>
             <button className="q1Button">Go to Q1</button>
           </div>
         </div>
 
-        {/* Card 2 */}
-       <div className="card q2Card">
-  <div className="cardContent q2Content">
-    <h3 className="q2Title">Question 2</h3>
-    <p className="q2Text">
-      11 is prime, 111 is not prime. We use the notation, 1<sub>N</sub> means N ones.
-      For example, for N = 7, we mean seven ones: 1111111.  
-      1<sub>N</sub> is represented by (10<sup>N−1</sup> − 1)/9.
-    </p>
-    <p className="q2Text">
-      If N is prime, 1<sub>N</sub> might be prime. If N is not prime, 1<sub>N</sub> cannot be prime. 
-      Thus, we have to check only when N is prime.
-    </p>
-    <p className="q2Text">
-      Your task is to determine the 5 primes between N = 2 and N = 1040. 
-      Remember that this involves both <strong>prime checking</strong> and 
-      <strong> pattern recognition</strong>.
-    </p>
-    <button className="q2Button" onClick={() => window.location.href='/q2'}>
-      Go to Q2
-    </button>
-  </div>
-</div>
-
-
-
-        {/* Card 3 */}
-       {/* Card 3 */}
-<div className="card q3Card">
-  <div className="q3Header">Question 3</div>
-  <p className="q3Text">
-    We are interested in Mersenne primes. A Mersenne prime is a prime number 
-    that is one less than a power of two. The largest Mersenne prime discovered 
-    was on Oct 12, 2024 when 2^(p-1) where p=136,279,841. This has 41,024,320 digits. 
-    Find the two primes where p lies between 2201 and 2299. 
-    These primes were discovered in 1952.
-  </p>
-  <div className="q3ButtonWrapper">
-    <button className="q3Button" onClick={() => window.location.href='/q3'}>
-      Go to Q3 
-    </button>
-  </div>
-</div>
-
-
-        {/* Card 4 */}
-        <div className="card purpleCard">
-          <div className="cardHeader">
-            <span className="caseStudyTag">CASE STUDIES</span>
-            <span className="readMore">Read now →</span>
-          </div>
-          <p className="cardText">
-            Mars achieves coverage of 80-90% of sources for true positives in
-            weeks
-          </p>
-          <div className="logoPlaceholder">
-            <img
-              src="https://i.imgur.com/w1iV18V.png"
-              alt="MARS Logo"
-              className="logo"
-            />
-          </div>
-        </div>
-
-        {/* Card 5 */}
-        <div className="card darkBlueCard">
-          <div className="cardHeader">
-            <span className="readMore">Read now →</span>
-          </div>
-          <p className="cardText">
-            "[With Tines professional services]we were able to build whatever we
-            wanted, and even add more features that we didn't previously cater
-            for."
-          </p>
-          <div className="authorInfo">
-            <p className="author">Issa Almannaei</p>
-            <p className="role">
-              Head of Security Operations Center, Beyon Cyber
+        {/* Question 2 */}
+        <div className="card q1Card greenCard">
+          <div className="q1Content">
+            <h3 className="q1Title">Question 2</h3>
+            <p className="q1Text">
+              11 is prime, 111 is not prime. We use the notation, 1<sub>N</sub> means N ones.<br/>
+              If N is prime, 1<sub>N</sub> might be prime. Otherwise, it cannot be prime.<br/>
+              Determine the 5 primes between N = 2 and N = 1040.
             </p>
+            <button className="q1Button" onClick={() => window.location.href='/q2'}>Go to Q2</button>
           </div>
         </div>
 
-        {/* Card 6 */}
-        <div className="card lightBlueCard">
-          <div className="largeNumber">30%</div>
-          <p className="cardText">more workflows compared to the average</p>
+        {/* Question 3 */}
+        <div className="card q1Card pinkCard">
+          <div className="q1Content">
+            <h3 className="q1Title">Question 3</h3>
+            <p className="q1Text">
+              Find the two Mersenne primes where p lies between 2201 and 2299.  
+              A Mersenne prime is one less than a power of two.
+            </p>
+            <button className="q1Button" onClick={() => window.location.href='/q3'}>Go to Q3</button>
+          </div>
         </div>
 
-        {/* Card 7 */}
-        <div className="card beigeCard">
-          <div className="largeNumber">2x</div>
-          <p className="cardText">
-            faster product adoption with professional services
-          </p>
+        {/* Question 4 */}
+        <div className="card q1Card lightBlueCard">
+          <div className="q1Content">
+            <h3 className="q1Title">Question 4</h3>
+            <p className="q1Text">
+              Brocard's conjecture: There are at least four primes between (p<sub>n</sub>)² and (p<sub>n+1</sub>)².<br/>
+              Using the two primes from #3, determine at least four primes between their squares.
+            </p>
+            <button className="q1Button">Go to Q4</button>
+          </div>
         </div>
+
+        {/* Question 5 */}
+        <div className="card q1Card darkBlueCard">
+          <div className="q1Content">
+            <h3 className="q1Title">Question 5</h3>
+            <p className="q1Text">
+              Palindromic primes are prime numbers that are also palindromes.<br/>
+              Examples: 11, 122333221, 1223334444555554444333221.<br/>
+              Find a palindromic prime with at least 50 digits.
+            </p>
+            <button className="q1Button">Go to Q5</button>
+          </div>
+        </div>
+
+        {/* Question 6 */}
+        <div className="card q1Card beigeCard">
+          <div className="q1Content">
+            <h3 className="q1Title">Question 6</h3>
+            <p className="q1Text">
+              A perfect number equals the sum of its positive proper divisors excluding itself.<br/>
+              Example: 6, 28. Using primes from #3, prove 2<sup>p-1</sup>(2<sup>p</sup> − 1) yields a perfect number.
+            </p>
+            <button className="q1Button">Go to Q6</button>
+          </div>
+        </div>
+
+        {/* Question 7 */}
+        <div className="card purpleCard q1Card">
+          <div className="q1Content">
+            <h3 className="q1Title">Question 7</h3>
+            <p className="q1Text">
+              Take one of the following open problems in prime numbers and prove them for a number greater than 50 digits:
+            </p>
+            <ul className="q1Text">
+              <li><b>Wieferich primes:</b> Only 1093 and 3511 are known, but conjectured to be infinite.</li>
+              <li><b>Goldbach's conjecture:</b> Every even n &gt; 2 is the sum of two primes.</li>
+              <li><b>Weak Goldbach Problem:</b> Every odd n &gt; 5 is the sum of three primes.</li>
+              <li><b>Prime differences:</b> Every even number is the difference of two primes.</li>
+              <li><b>Legendre's conjecture:</b> There is a prime between consecutive integer squares, implying at least two primes between prime squares for pₙ ≥ 3.</li>
+              <li><b>Oppermann's conjecture:</b> For n &gt; 1, there is a prime between n(n-1) and n², and another between n² and n(n+1).</li>
+            </ul>
+            <button className="q1Button">Go to Q7</button>
+          </div>
+        </div>
+
       </div>
     </div>
   );
