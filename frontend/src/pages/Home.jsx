@@ -1,7 +1,9 @@
 import React from "react";
 import "./Home.css";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
+    const navigate = useNavigate();
   return (
     <div className="container">
       <h1 className="heading">Prime Numbers Assignment </h1>
@@ -17,7 +19,7 @@ function HomePage() {
               That number n lies between 1000 and 3000.<br/>
               This was discovered by an <b>Indian</b>.
             </p>
-            <button className="q1Button">Go to Q1</button>
+            <button className="q1Button" onClick={()=>navigate("/q1")}>Go to Q1</button>
           </div>
         </div>
 
@@ -30,7 +32,7 @@ function HomePage() {
               If N is prime, 1<sub>N</sub> might be prime. Otherwise, it cannot be prime.<br/>
               Determine the 5 primes between N = 2 and N = 1040.
             </p>
-            <button className="q1Button" onClick={() => window.location.href='/q2'}>Go to Q2</button>
+            <button className="q1Button" onClick={() => navigate('/q2')}>Go to Q2</button>
           </div>
         </div>
 
@@ -42,7 +44,7 @@ function HomePage() {
               Find the two Mersenne primes where p lies between 2201 and 2299.  
               A Mersenne prime is one less than a power of two.
             </p>
-            <button className="q1Button" onClick={() => window.location.href='/q3'}>Go to Q3</button>
+            <button className="q1Button" onClick={() => navigate('/q3')}>Go to Q3</button>
           </div>
         </div>
 
@@ -54,7 +56,7 @@ function HomePage() {
               Brocard's conjecture: There are at least four primes between (p<sub>n</sub>)² and (p<sub>n+1</sub>)².<br/>
               Using the two primes from #3, determine at least four primes between their squares.
             </p>
-            <button className="q1Button">Go to Q4</button>
+            <button className="q1Button" onClick={()=>navigate('/q4')}>Go to Q4</button>
           </div>
         </div>
 
@@ -67,7 +69,7 @@ function HomePage() {
               Examples: 11, 122333221, 1223334444555554444333221.<br/>
               Find a palindromic prime with at least 50 digits.
             </p>
-            <button className="q1Button">Go to Q5</button>
+            <button className="q1Button" onClick={()=>navigate('/q5')}>Go to Q5</button>
           </div>
         </div>
 
@@ -79,7 +81,7 @@ function HomePage() {
               A perfect number equals the sum of its positive proper divisors excluding itself.<br/>
               Example: 6, 28. Using primes from #3, prove 2<sup>p-1</sup>(2<sup>p</sup> − 1) yields a perfect number.
             </p>
-            <button className="q1Button">Go to Q6</button>
+            <button className="q1Button" onClick={()=>navigate('/q6')}>Go to Q6</button>
           </div>
         </div>
 
@@ -98,7 +100,7 @@ function HomePage() {
               <li><b>Legendre's conjecture:</b> There is a prime between consecutive integer squares, implying at least two primes between prime squares for pₙ ≥ 3.</li>
               <li><b>Oppermann's conjecture:</b> For n &gt; 1, there is a prime between n(n-1) and n², and another between n² and n(n+1).</li>
             </ul>
-            <button className="q1Button">Go to Q7</button>
+            <button className="q1Button" onClick={()=>navigate('/q7')}>Go to Q7</button>
           </div>
         </div>
 
