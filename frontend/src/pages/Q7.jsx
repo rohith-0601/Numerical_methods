@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 function Q7() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
 
   const questionText = `7. Goldbach's Conjecture (b): Every even number > 2 is the sum of two primes.
 Here we test it for two 50+ digit even numbers.`;
@@ -138,10 +140,12 @@ print(pair1, pair2)
           ) : data ? (
             <>
               <p>
-                Goldbach for {data.numbers[0]}: ({data.pairs[0][0]}, {data.pairs[0][1]})
+                Goldbach for {data.numbers[0]}: ({data.pairs[0][0]},{" "}
+                {data.pairs[0][1]})
               </p>
               <p>
-                Goldbach for {data.numbers[1]}: ({data.pairs[1][0]}, {data.pairs[1][1]})
+                Goldbach for {data.numbers[1]}: ({data.pairs[1][0]},{" "}
+                {data.pairs[1][1]})
               </p>
               <p>Time taken: {data.runtime_seconds} seconds</p>
             </>
@@ -151,10 +155,21 @@ print(pair1, pair2)
         </div>
       </div>
 
-      <div style={bottomButtons}>
-        <button style={buttonStyle} onClick={() => window.history.back()}>
-          ← Previous
-        </button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "20px",
+        }}
+      >
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button style={buttonStyle} onClick={() => navigate("/")}>
+            Home
+          </button>
+          <button style={buttonStyle} onClick={() => window.history.back()}>
+            ← Previous
+          </button>
+        </div>
       </div>
 
       <ToastContainer position="top-right" autoClose={2000} />

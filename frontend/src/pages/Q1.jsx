@@ -13,7 +13,7 @@ function Q1({ navigatePrev, navigateNext }) {
   useEffect(() => {
     let timer;
     if (loading) {
-      timer = setInterval(() => setTimeElapsed(prev => prev + 1), 1000);
+      timer = setInterval(() => setTimeElapsed((prev) => prev + 1), 1000);
     }
     return () => clearInterval(timer);
   }, [loading]);
@@ -201,10 +201,21 @@ Find the next number that follows this pattern. That number n lies between 1000 
       </div>
 
       {/* Bottom Buttons */}
-      <div style={bottomButtons}>
-        <button style={buttonStyle} onClick={() => navigate("/")}>
-          ← Previous
-        </button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "20px",
+        }}
+      >
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button style={buttonStyle} onClick={() => navigate("/")}>
+            Home
+          </button>
+          <button style={buttonStyle} onClick={() => navigate("/")}>
+            ← Previous
+          </button>
+        </div>
         <button style={buttonStyle} onClick={() => navigate("/q2")}>
           Next →
         </button>

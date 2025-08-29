@@ -153,10 +153,21 @@ for p in primes:
         </div>
       </div>
 
-      <div style={bottomButtons}>
-        <button style={buttonStyle} onClick={() => navigate("/q3")}>
-          ← Previous
-        </button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "20px",
+        }}
+      >
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button style={buttonStyle} onClick={() => navigate("/")}>
+            Home
+          </button>
+          <button style={buttonStyle} onClick={() => navigate("/q3")}>
+            ← Previous
+          </button>
+        </div>
         <button style={buttonStyle} onClick={() => navigate("/q5")}>
           Next →
         </button>

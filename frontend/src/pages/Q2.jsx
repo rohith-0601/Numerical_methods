@@ -141,7 +141,9 @@ for n, Rn in repunit_primes:
                 <p key={item.n}>
                   1<sub>{item.n}</sub> ={" "}
                   {item.repunit.length > 60
-                    ? `${item.repunit.slice(0, 30)}...${item.repunit.slice(-30)}`
+                    ? `${item.repunit.slice(0, 30)}...${item.repunit.slice(
+                        -30
+                      )}`
                     : item.repunit}
                 </p>
               ))}
@@ -151,10 +153,21 @@ for n, Rn in repunit_primes:
         </div>
       </div>
 
-      <div style={bottomButtons}>
-        <button style={buttonStyle} onClick={() => navigate("/q1")}>
-          ← Previous
-        </button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "20px",
+        }}
+      >
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button style={buttonStyle} onClick={() => navigate("/")}>
+            Home
+          </button>
+          <button style={buttonStyle} onClick={() => navigate("/q1")}>
+            ← Previous
+          </button>
+        </div>
         <button style={buttonStyle} onClick={() => navigate("/q3")}>
           Next →
         </button>

@@ -151,10 +151,21 @@ for p in range(2201, 2300):
         </div>
       </div>
 
-      <div style={bottomButtons}>
-        <button style={buttonStyle} onClick={() => navigate("/q2")}>
-          ← Previous
-        </button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "20px",
+        }}
+      >
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button style={buttonStyle} onClick={() => navigate("/")}>
+            Home
+          </button>
+          <button style={buttonStyle} onClick={() => navigate("/q2")}>
+            ← Previous
+          </button>
+        </div>
         <button style={buttonStyle} onClick={() => navigate("/q4")}>
           Next →
         </button>
