@@ -15,7 +15,9 @@ def api_q2():
     return jsonify(q2())
 
 @app.route("/api/q3")
-def api_q3(): return jsonify(q3())
+def api_q3(): 
+    return jsonify(q3())
+
 @app.route("/api/q4")
 def api_q4(): return jsonify(q4())
 @app.route("/api/q5")
