@@ -18,18 +18,29 @@ function Q1({ navigatePrev, navigateNext }) {
     return () => clearInterval(timer);
   }, [loading]);
 
-  // Fetch Q1 data from backend
+  // Fetch Q1 data from backend via EventSource (stream)
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:5000/api/q1")
-      .then((response) => {
-        setData(response.data);
+    const eventSource = new EventSource("http://127.0.0.1:5000/api/q1/stream");
+
+    eventSource.onmessage = (e) => {
+      const parsed = JSON.parse(e.data);
+      if (parsed.found) {
+        setData(parsed);
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching Q1 data:", error);
-        setLoading(false);
-      });
+        eventSource.close();
+      } else {
+        // Optional: show progress/time
+        setTimeElapsed(parsed.runtime_seconds);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.error("EventSource failed:", err);
+      setLoading(false);
+      eventSource.close();
+    };
+
+    return () => eventSource.close();
   }, []);
 
   const pythonCode = `
@@ -101,8 +112,8 @@ Find the next number that follows this pattern. That number n lies between 1000 
     borderRadius: "12px",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
     fontFamily: "monospace",
   };
 
@@ -170,7 +181,19 @@ Find the next number that follows this pattern. That number n lies between 1000 
             <>
               <p>✅ Output:</p>
               <p>n = {data.n}</p>
-              <p>Kaprekar Number = {data.kaprekar_number}</p>
+              <div
+                style={{
+                  maxHeight: "250px",
+                  width: "100%",
+                  overflowY: "auto",
+                  backgroundColor: "#f0e5d3",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  wordBreak: "break-all",
+                }}
+              >
+                Kaprekar Number = {data.kaprekar_number}
+              </div>
               <p>Time taken: {data.runtime_seconds} seconds</p>
             </>
           )}
@@ -179,10 +202,10 @@ Find the next number that follows this pattern. That number n lies between 1000 
 
       {/* Bottom Buttons */}
       <div style={bottomButtons}>
-        <button style={buttonStyle} onClick={()=>navigate('/')}>
+        <button style={buttonStyle} onClick={() => navigate("/")}>
           ← Previous
         </button>
-        <button style={buttonStyle} onClick={()=>navigate('/q2')}>
+        <button style={buttonStyle} onClick={() => navigate("/q2")}>
           Next →
         </button>
       </div>
