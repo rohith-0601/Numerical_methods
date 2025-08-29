@@ -75,17 +75,14 @@ def q3():
 def q4():
     start_time = time.time()
 
-    # Use Q3 results if available
     if LAST_Q3 and LAST_Q3.get("mersenne_primes") and len(LAST_Q3["mersenne_primes"]) >= 2:
         mersennes = LAST_Q3["mersenne_primes"]
         M1 = mpz(mersennes[0]["mersenne_number"])
         M2 = mpz(mersennes[1]["mersenne_number"])
     else:
-        # Default Mersenne primes if Q3 hasn't been run
         M1 = mpz(2)**2203 - 1
         M2 = mpz(2)**2281 - 1
 
-    # Find first 4 primes between M1^2 and M2^2
     low = M1**2
     high = M2**2
     primes = []
@@ -99,13 +96,12 @@ def q4():
 
 # -------- Q5: Palindromic prime with >=50 digits --------
 def generate_palindrome(length):
-    """Generate odd-length palindromes only (even ones divisible by 11)."""
     half = (length + 1) // 2
     start = 10 ** (half - 1)
     end = 10 ** half
     for i in range(start, end):
         s = str(i)
-        pal = s + s[-2::-1]  # odd-length palindrome
+        pal = s + s[-2::-1]
         yield mpz(pal)
 
 def q5(min_digits=50):
@@ -120,8 +116,32 @@ def q5(min_digits=50):
                     "digits": len(str(pal)),
                     "runtime_seconds": elapsed
                 }
-        length += 2  # next odd length
+        length += 2
 
-# -------- Placeholders for Q6-Q7 --------
-def q6(): return {"message": "Q6 result here"}
+# -------- Q6: Perfect numbers from Mersenne primes --------
+def q6():
+    start_time = time.time()
+    if LAST_Q3 and LAST_Q3.get("mersenne_primes"):
+        mersennes = LAST_Q3["mersenne_primes"]
+    else:
+        # Default first 2 known Mersenne primes for demonstration
+        mersennes = [
+            {"p": 2203, "mersenne_number": str(mpz(2)**2203 - 1)},
+            {"p": 2281, "mersenne_number": str(mpz(2)**2281 - 1)}
+        ]
+
+    perfect_numbers = []
+    for item in mersennes:
+        p = item["p"]
+        M_p = mpz(item["mersenne_number"])
+        N = (1 << (p - 1)) * M_p
+        perfect_numbers.append({
+            "p": p,
+            "perfect_number": str(N)
+        })
+
+    elapsed = round(time.time() - start_time, 2)
+    return {"perfect_numbers": perfect_numbers, "runtime_seconds": elapsed}
+
+# -------- Placeholder for Q7 --------
 def q7(): return {"message": "Q7 result here"}
