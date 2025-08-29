@@ -42,6 +42,8 @@ def q2():
     return {"repunit_primes": repunit_primes, "runtime_seconds": elapsed}
 
 # -------- Q3: Mersenne primes --------
+LAST_Q3 = None
+
 def lucas_lehmer(p):
     if p == 2:
         return True
@@ -52,6 +54,7 @@ def lucas_lehmer(p):
     return s == 0
 
 def q3():
+    global LAST_Q3
     start_time = time.time()
     mersenne_primes = []
 
@@ -64,19 +67,23 @@ def q3():
             })
 
     elapsed = round(time.time() - start_time, 2)
-    return {"mersenne_primes": mersenne_primes, "runtime_seconds": elapsed}
+    result = {"mersenne_primes": mersenne_primes, "runtime_seconds": elapsed}
+    LAST_Q3 = result
+    return result
 
 # -------- Q4: Brocard's conjecture using Q3 results --------
 def q4():
     start_time = time.time()
-    q3_result = q3()  # Use Q3 results by default
-    mersennes = q3_result.get("mersenne_primes", [])
 
-    if len(mersennes) < 2:
-        return {"error": "Not enough Mersenne primes from Q3 to calculate Q4."}
-
-    M1 = mpz(mersennes[0]["mersenne_number"])
-    M2 = mpz(mersennes[1]["mersenne_number"])
+    # Use Q3 results if available
+    if LAST_Q3 and LAST_Q3.get("mersenne_primes") and len(LAST_Q3["mersenne_primes"]) >= 2:
+        mersennes = LAST_Q3["mersenne_primes"]
+        M1 = mpz(mersennes[0]["mersenne_number"])
+        M2 = mpz(mersennes[1]["mersenne_number"])
+    else:
+        # Default Mersenne primes if Q3 hasn't been run
+        M1 = mpz(2)**2203 - 1
+        M2 = mpz(2)**2281 - 1
 
     # Find first 4 primes between M1^2 and M2^2
     low = M1**2
