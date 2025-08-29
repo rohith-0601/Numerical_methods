@@ -26,28 +26,10 @@ def q1():
             }
     return None
 
-# -------- Q2 --------
-def q2():
-    # placeholder for Q2 logic
-    return {"message": "Q2 result here"}
-
-# -------- Q3 --------
-def q3():
-    # placeholder for Q3 logic
-    return {"message": "Q3 result here"}
-
-# -------- Q4 --------
-def q4():
-    return {"message": "Q4 result here"}
-
-# -------- Q5 --------
-def q5():
-    return {"message": "Q5 result here"}
-
-# -------- Q6 --------
-def q6():
-    return {"message": "Q6 result here"}
-
-# -------- Q7 --------
-def q7():
-    return {"message": "Q7 result here"}
+# -------- Q2-Q7 placeholders --------
+def q2(): return {"message": "Q2 result here"}
+def q3(): return {"message": "Q3 result here"}
+def q4(): return {"message": "Q4 result here"}
+def q5(): return {"message": "Q5 result here"}
+def q6(): return {"message": "Q6 result here"}
+def q7(): return {"message": "Q7 result here"}
