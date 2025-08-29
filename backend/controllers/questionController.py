@@ -2,7 +2,7 @@ import gmpy2
 import sys
 import time
 from sympy import isprime, primerange
-from gmpy2 import mpz, next_prime
+from gmpy2 import mpz, next_prime, is_prime
 
 sys.set_int_max_str_digits(20000)
 
@@ -97,7 +97,31 @@ def q4():
     elapsed = round(time.time() - start_time, 2)
     return {"primes": [str(p) for p in primes], "runtime_seconds": elapsed}
 
-# -------- Placeholders for Q5-Q7 --------
-def q5(): return {"message": "Q5 result here"}
+# -------- Q5: Palindromic prime with >=50 digits --------
+def generate_palindrome(length):
+    """Generate odd-length palindromes only (even ones divisible by 11)."""
+    half = (length + 1) // 2
+    start = 10 ** (half - 1)
+    end = 10 ** half
+    for i in range(start, end):
+        s = str(i)
+        pal = s + s[-2::-1]  # odd-length palindrome
+        yield mpz(pal)
+
+def q5(min_digits=50):
+    start_time = time.time()
+    length = min_digits if min_digits % 2 == 1 else min_digits + 1
+    while True:
+        for pal in generate_palindrome(length):
+            if is_prime(pal):
+                elapsed = round(time.time() - start_time, 2)
+                return {
+                    "palindromic_prime": str(pal),
+                    "digits": len(str(pal)),
+                    "runtime_seconds": elapsed
+                }
+        length += 2  # next odd length
+
+# -------- Placeholders for Q6-Q7 --------
 def q6(): return {"message": "Q6 result here"}
 def q7(): return {"message": "Q7 result here"}
