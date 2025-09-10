@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 function Q6() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [pValues, setPValues] = useState("2203,2281"); // default input
 
   const navigate = useNavigate();
 
@@ -31,8 +32,9 @@ def perfect_number_from_mersenne(p, M_p):
     setData(null);
     setLoading(true);
 
+    // Send p values as query parameter
     axios
-      .get("http://127.0.0.1:5000/api/q6")
+      .get(`http://127.0.0.1:5000/api/q6?p_values=${encodeURIComponent(pValues)}`)
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -54,11 +56,7 @@ def perfect_number_from_mersenne(p, M_p):
     boxSizing: "border-box",
   };
 
-  const contentStyle = {
-    display: "flex",
-    flex: 1,
-    gap: "20px",
-  };
+  const contentStyle = { display: "flex", flex: 1, gap: "20px" };
 
   const codeStyle = {
     flex: 1,
@@ -110,6 +108,14 @@ def perfect_number_from_mersenne(p, M_p):
 
       <div style={questionStyle}>
         <p>{questionText}</p>
+        {/* Input for p values */}
+        <input
+          type="text"
+          value={pValues}
+          onChange={(e) => setPValues(e.target.value)}
+          placeholder="Enter comma-separated p values, e.g., 2203,2281"
+          style={{ padding: "6px 10px", borderRadius: "6px", border: "1px solid #888", width: "100%", marginTop: "10px" }}
+        />
       </div>
 
       <div style={contentStyle}>
@@ -133,7 +139,6 @@ def perfect_number_from_mersenne(p, M_p):
           </button>
           <pre>{pythonCode}</pre>
 
-          {/* Run Code Button under the code */}
           <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
             <button onClick={runCode} style={navButtonStyle}>
               Run Code
@@ -163,13 +168,7 @@ def perfect_number_from_mersenne(p, M_p):
       </div>
 
       {/* Navigation Buttons */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "20px",
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
         <div style={{ display: "flex", gap: "10px" }}>
           <button style={navButtonStyle} onClick={() => navigate("/")}>
             Home

@@ -38,7 +38,10 @@ def api_q5():
     min_digits = request.args.get("min_digits", default=50, type=int)
     return jsonify(q5(min_digits=min_digits))
 @app.route("/api/q6")
-def api_q6(): return jsonify(q6())
+def api_q6():
+    # Call q6() which reads `p_values` from query string
+    result = q6()
+    return jsonify(result)
 @app.route("/api/q7")
 def api_q7(): return jsonify(q7())
 

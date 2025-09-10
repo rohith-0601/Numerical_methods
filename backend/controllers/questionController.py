@@ -145,13 +145,36 @@ def q5(min_digits=50):
 # -------- Q6: Perfect numbers from Mersenne primes --------
 def q6():
     start_time = time.time()
-    if LAST_Q3 and LAST_Q3.get("mersenne_primes"):
-        mersennes = LAST_Q3["mersenne_primes"]
+
+    # Get p values from query string, e.g., "2203,2281"
+    p_values_str = request.args.get("p_values", None)
+    mersennes = []
+
+    if p_values_str:
+        try:
+            # Convert comma-separated string to list of integers
+            p_list = [int(p.strip()) for p in p_values_str.split(",")]
+            for p in p_list:
+                M_p = mpz(2) ** p - 1
+                mersennes.append({"p": p, "mersenne_number": str(M_p)})
+        except ValueError:
+            # Invalid input, fallback to LAST_Q3
+            if LAST_Q3 and LAST_Q3.get("mersenne_primes"):
+                mersennes = LAST_Q3["mersenne_primes"]
+            else:
+                mersennes = [
+                    {"p": 2, "mersenne_number": str(mpz(2)**2 - 1)},
+                    {"p": 3, "mersenne_number": str(mpz(2)**3 - 1)}
+                ]
     else:
-        mersennes = [
-            {"p": 2, "mersenne_number": str(mpz(2)**2 - 1)},
-            {"p": 3, "mersenne_number": str(mpz(2)**3 - 1)}
-        ]
+        # No input provided, use LAST_Q3 or default small Mersenne primes
+        if LAST_Q3 and LAST_Q3.get("mersenne_primes"):
+            mersennes = LAST_Q3["mersenne_primes"]
+        else:
+            mersennes = [
+                {"p": 2, "mersenne_number": str(mpz(2)**2 - 1)},
+                {"p": 3, "mersenne_number": str(mpz(2)**3 - 1)}
+            ]
 
     perfect_numbers = []
     for item in mersennes:
@@ -159,6 +182,7 @@ def q6():
         M_p = mpz(item["mersenne_number"])
         N = (1 << (p - 1)) * M_p
         perfect_numbers.append({"p": p, "perfect_number": str(N)})
+
     elapsed = round(time.time() - start_time, 2)
     return {"perfect_numbers": perfect_numbers, "runtime_seconds": elapsed}
 
