@@ -8,8 +8,8 @@ function Q1() {
   const [loading, setLoading] = useState(false);
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [eventSource, setEventSource] = useState(null);
-  const [rangeStart, setRangeStart] = useState(1000);
-  const [rangeEnd, setRangeEnd] = useState(3000);
+  const [rangeStart, setRangeStart] = useState(0);
+  const [rangeEnd, setRangeEnd] = useState(0);
 
   const navigate = useNavigate();
 

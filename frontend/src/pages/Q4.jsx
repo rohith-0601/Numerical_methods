@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 function Q4() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [startP, setStartP] = useState("2203");
+  const [endP, setEndP] = useState("2281");
 
   const navigate = useNavigate();
 
@@ -28,11 +30,11 @@ def first_primes_between_squares(pn, pn1, count=4):
         candidate = next_prime(candidate)
     return primes
 
-# Use the Mersenne primes from Q3
-M_2203 = mpz(2) ** 2203 - 1
-M_2281 = mpz(2) ** 2281 - 1
+# Use the Mersenne primes from inputs
+M_start = mpz(pn)
+M_end = mpz(pn1)
 
-primes = first_primes_between_squares(M_2203, M_2281, count=4)
+primes = first_primes_between_squares(M_start, M_end, count=4)
 for p in primes:
     print(p)
 `;
@@ -47,7 +49,9 @@ for p in primes:
     setLoading(true);
 
     axios
-      .get("http://127.0.0.1:5000/api/q4")
+      .get("http://127.0.0.1:5000/api/q4", {
+        params: { startP: startP, endP: endP },
+      })
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -121,6 +125,29 @@ for p in primes:
         <p>{questionText}</p>
       </div>
 
+      {/* Input fields for start and end Mersenne primes */}
+      <div style={{ marginBottom: "20px" }}>
+        <label>
+          Start Mersenne prime (pn):
+          <input
+            type="text"
+            value={startP}
+            onChange={(e) => setStartP(e.target.value)}
+            style={{ marginLeft: "10px", width: "200px" }}
+          />
+        </label>
+        <br />
+        <label style={{ marginTop: "10px" }}>
+          End Mersenne prime (pn+1):
+          <input
+            type="text"
+            value={endP}
+            onChange={(e) => setEndP(e.target.value)}
+            style={{ marginLeft: "10px", width: "200px" }}
+          />
+        </label>
+      </div>
+
       <div style={contentStyle}>
         {/* Code Section */}
         <div style={codeStyle}>
@@ -142,7 +169,7 @@ for p in primes:
           </button>
           <pre>{pythonCode}</pre>
 
-          {/* Run Code Button under the code */}
+          {/* Run Code Button */}
           <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
             <button onClick={runCode} style={navButtonStyle}>
               Run Code
