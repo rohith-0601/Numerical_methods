@@ -8,8 +8,8 @@ function Q1() {
   const [loading, setLoading] = useState(false);
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [eventSource, setEventSource] = useState(null);
-  const [rangeStart, setRangeStart] = useState(null);
-  const [rangeEnd, setRangeEnd] = useState(null);
+  const [rangeStart, setRangeStart] = useState("");
+  const [rangeEnd, setRangeEnd] = useState("");
 
   const navigate = useNavigate();
 
@@ -22,8 +22,16 @@ function Q1() {
     return () => clearInterval(timer);
   }, [loading]);
 
-  // Run Code Event
   const runCode = () => {
+    if (!rangeStart || !rangeEnd) {
+      toast.error("Please enter both start and end values.");
+      return;
+    }
+    if (rangeStart > rangeEnd) {
+      toast.error("Start must be less than or equal to End.");
+      return;
+    }
+
     setData(null);
     setTimeElapsed(0);
     setLoading(true);
@@ -39,8 +47,12 @@ function Q1() {
         setData(parsed);
         setLoading(false);
         source.close();
-      } else {
+      } else if (parsed.current_n) {
         setTimeElapsed(parsed.runtime_seconds);
+      } else if (parsed.message) {
+        setData(parsed);
+        setLoading(false);
+        source.close();
       }
     };
 
@@ -77,7 +89,7 @@ for n in range(1000, 3001):
 
   const questionText = `A prime number is generated using a Kaprekar pattern:
 1 2 3 ... n (n-1) ... 3 2 1
-Find the next number that follows this pattern. That number n lies between 1000 and 3000.`;
+Find the next number that follows this pattern.`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(pythonCode);
@@ -216,21 +228,27 @@ Find the next number that follows this pattern. That number n lies between 1000 
             </>
           ) : data ? (
             <>
-              <p>✅ Output:</p>
-              <p>n = {data.n}</p>
-              <div
-                style={{
-                  maxHeight: "250px",
-                  overflowY: "auto",
-                  backgroundColor: "#f0e5d3",
-                  padding: "10px",
-                  borderRadius: "8px",
-                  wordBreak: "break-all",
-                }}
-              >
-                Kaprekar Number = {data.kaprekar_number}
-              </div>
-              <p>Time taken: {data.runtime_seconds} seconds</p>
+              {data.kaprekar_number ? (
+                <>
+                  <p>✅ Output:</p>
+                  <p>n = {data.n}</p>
+                  <div
+                    style={{
+                      maxHeight: "250px",
+                      overflowY: "auto",
+                      backgroundColor: "#f0e5d3",
+                      padding: "10px",
+                      borderRadius: "8px",
+                      wordBreak: "break-all",
+                    }}
+                  >
+                    Kaprekar Number = {data.kaprekar_number}
+                  </div>
+                  <p>Time taken: {data.runtime_seconds} seconds</p>
+                </>
+              ) : (
+                <p>❌ No Kaprekar prime found in this range.</p>
+              )}
             </>
           ) : (
             <p>Click "Run Code" under the code to see the output</p>

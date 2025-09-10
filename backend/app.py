@@ -8,10 +8,17 @@ CORS(app)  # Allow React frontend to fetch
 # SSE endpoint for Q1
 @app.route("/api/q1/stream")
 def api_q1_stream():
-    start = int(request.args.get("start", 1000))
-    end = int(request.args.get("end", 3000))
-    return Response(q1_stream(start=start, end=end), mimetype="text/event-stream")
+    try:
+        start = int(request.args.get("start", 1000))
+        end = int(request.args.get("end", 3000))
+    except (ValueError, TypeError):
+        start, end = 1000, 3000
 
+    # Ensure start is <= end
+    if start > end:
+        start, end = end, start
+
+    return Response(q1_stream(start=start, end=end), mimetype="text/event-stream")
 @app.route("/api/q2")
 def api_q2():
     start = int(request.args.get("start", 2))

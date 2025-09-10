@@ -7,6 +7,12 @@ from gmpy2 import mpz, next_prime, is_prime
 sys.set_int_max_str_digits(20000)
 
 # -------- Q1: Kaprekar-like numbers --------
+from flask import Flask, Response, request
+import time
+import gmpy2
+
+app = Flask(__name__)
+
 def kaprekar_number(n: int) -> int:
     num = 0
     for i in range(1, n + 1):
@@ -17,6 +23,8 @@ def kaprekar_number(n: int) -> int:
 
 def q1_stream(start=1000, end=3000):
     start_time = time.time()
+    found = False
+
     for n in range(start, end + 1):
         candidate = kaprekar_number(n)
         elapsed = round(time.time() - start_time, 2)
@@ -24,7 +32,21 @@ def q1_stream(start=1000, end=3000):
         yield f"data: {{\"current_n\": {n}, \"runtime_seconds\": {elapsed}}}\n\n"
         if gmpy2.is_prime(candidate):
             yield f"data: {{\"found\": true, \"n\": {n}, \"kaprekar_number\": \"{candidate}\", \"runtime_seconds\": {elapsed}}}\n\n"
+            found = True
             break
+
+    if not found:
+        elapsed = round(time.time() - start_time, 2)
+        yield f"data: {{\"found\": false, \"message\": \"No number found\", \"runtime_seconds\": {elapsed}}}\n\n"
+
+@app.route("/api/q1/stream")
+def api_q1_stream():
+    try:
+        start = int(request.args.get("start", 1000))
+        end = int(request.args.get("end", 3000))
+    except ValueError:
+        start, end = 1000, 3000
+    return Response(q1_stream(start=start, end=end), mimetype="text/event-stream")
 
 # -------- Q2: Repunit primes --------
 def repunit(n):
