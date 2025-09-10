@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 function Q5() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [minDigits, setMinDigits] = useState(50);
 
   const navigate = useNavigate();
 
@@ -47,7 +48,7 @@ print(pal_prime)
     setLoading(true);
 
     axios
-      .get("http://127.0.0.1:5000/api/q5")
+      .get(`http://127.0.0.1:5000/api/q5?min_digits=${minDigits}`)
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -143,6 +144,21 @@ print(pal_prime)
             Copy
           </button>
           <pre>{pythonCode}</pre>
+
+          {/* Input for min digits */}
+          <div style={{ marginTop: "10px" }}>
+            <label>
+              Min Digits:{" "}
+              <input
+                type="number"
+                value={minDigits}
+                onChange={(e) =>
+                  setMinDigits(parseInt(e.target.value) || 50)
+                }
+                style={{ width: 60, marginLeft: 5, padding: 2 }}
+              />
+            </label>
+          </div>
 
           {/* Run Code Button under the code */}
           <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>

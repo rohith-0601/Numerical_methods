@@ -111,22 +111,35 @@ def q4():
 
 # -------- Q5: Palindromic prime >=50 digits --------
 def generate_palindrome(length):
+    """
+    Generate odd-length palindromes of given length.
+    Yields gmpy2.mpz integers.
+    """
     half = (length + 1) // 2
     start = 10 ** (half - 1)
     end = 10 ** half
     for i in range(start, end):
         s = str(i)
-        pal = s + s[-2::-1]  # odd-length palindrome
+        pal = s + s[-2::-1]  # construct odd-length palindrome
         yield mpz(pal)
 
 def q5(min_digits=50):
+    """
+    Find the first palindromic prime with at least min_digits.
+    Returns a dictionary with the palindrome, number of digits, and runtime.
+    """
     start_time = time.time()
     length = min_digits if min_digits % 2 == 1 else min_digits + 1
+
     while True:
         for pal in generate_palindrome(length):
             if is_prime(pal):
                 elapsed = round(time.time() - start_time, 2)
-                return {"palindromic_prime": str(pal), "digits": len(str(pal)), "runtime_seconds": elapsed}
+                return {
+                    "palindromic_prime": str(pal),
+                    "digits": len(str(pal)),
+                    "runtime_seconds": elapsed
+                }
         length += 2
 
 # -------- Q6: Perfect numbers from Mersenne primes --------
