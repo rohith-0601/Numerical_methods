@@ -187,8 +187,10 @@ def q6():
     return {"perfect_numbers": perfect_numbers, "runtime_seconds": elapsed}
 
 # -------- Q7: Goldbach Conjecture for 50+ digit even numbers --------
-def q7():
+def q7(N1=None, N2=None):
     from sympy import isprime, nextprime
+    import time
+
     start_time = time.time()
 
     def goldbach_pair(N: int):
@@ -201,8 +203,16 @@ def q7():
             p = nextprime(p)
         return None
 
-    N1 = 10 ** 49 + 12
-    N2 = 10 ** 50 + 88
+    # Use provided inputs if given, otherwise default
+    if N1 is None:
+        N1 = 10 ** 49 + 12
+    else:
+        N1 = int(N1)
+
+    if N2 is None:
+        N2 = 10 ** 50 + 88
+    else:
+        N2 = int(N2)
 
     pair1 = goldbach_pair(N1)
     pair2 = goldbach_pair(N2)
@@ -213,3 +223,4 @@ def q7():
         "pairs": [[str(pair1[0]), str(pair1[1])], [str(pair2[0]), str(pair2[1])]],
         "runtime_seconds": elapsed
     }
+

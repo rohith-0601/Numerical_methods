@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 function Q7() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [number1, setNumber1] = useState("10000000000000000000000000000000000000000000000012");
+  const [number2, setNumber2] = useState("100000000000000000000000000000000000000000000000088");
+
   const navigate = useNavigate();
 
   const questionText = `7. Goldbach's Conjecture (b): Every even number > 2 is the sum of two primes.
@@ -25,8 +28,8 @@ def goldbach_pair(N: int):
         p = nextprime(p)
     return None
 
-N1 = 10**49 + 12
-N2 = 10**50 + 88
+N1 = ${number1}
+N2 = ${number2}
 pair1 = goldbach_pair(N1)
 pair2 = goldbach_pair(N2)
 print(pair1, pair2)
@@ -41,7 +44,7 @@ print(pair1, pair2)
     setData(null);
     setLoading(true);
     axios
-      .get("http://127.0.0.1:5000/api/q7")
+      .get("http://127.0.0.1:5000/api/q7", { params: { N1: number1, N2: number2 } })
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -53,61 +56,13 @@ print(pair1, pair2)
       });
   };
 
-  const pageStyle = {
-    display: "flex",
-    flexDirection: "column",
-    height: "100vh",
-    backgroundColor: "#ffffff",
-    color: "#000",
-    padding: "20px",
-    boxSizing: "border-box",
-  };
-
+  const pageStyle = { display: "flex", flexDirection: "column", height: "100vh", backgroundColor: "#ffffff", color: "#000", padding: "20px", boxSizing: "border-box" };
   const contentStyle = { display: "flex", flex: 1, gap: "20px" };
-
-  const codeStyle = {
-    flex: 1,
-    backgroundColor: "#fdf6e3",
-    padding: "20px",
-    borderRadius: "12px",
-    border: "1px solid #e0d5c2",
-    overflowY: "auto",
-    fontFamily: "monospace",
-    whiteSpace: "pre-wrap",
-    position: "relative",
-  };
-
-  const outputStyle = {
-    flex: 1,
-    backgroundColor: "#f1ebd8",
-    border: "1px solid #e0d5c2",
-    borderRadius: "12px",
-    padding: "20px",
-    fontFamily: "monospace",
-    maxHeight: "400px",
-    overflowY: "auto",
-    wordBreak: "break-word",
-    display: "flex",
-    flexDirection: "column",
-  };
-
-  const questionStyle = {
-    backgroundColor: "#fdf6e3",
-    padding: "15px",
-    borderRadius: "12px",
-    marginBottom: "20px",
-    border: "1px solid #e0d5c2",
-  };
-
-  const navButtonStyle = {
-    padding: "10px 20px",
-    borderRadius: "8px",
-    border: "none",
-    fontWeight: "bold",
-    cursor: "pointer",
-    backgroundColor: "#f5e6c7",
-    color: "#000",
-  };
+  const codeStyle = { flex: 1, backgroundColor: "#fdf6e3", padding: "20px", borderRadius: "12px", border: "1px solid #e0d5c2", overflowY: "auto", fontFamily: "monospace", whiteSpace: "pre-wrap", position: "relative" };
+  const outputStyle = { flex: 1, backgroundColor: "#f1ebd8", border: "1px solid #e0d5c2", borderRadius: "12px", padding: "20px", fontFamily: "monospace", maxHeight: "400px", overflowY: "auto", wordBreak: "break-word", display: "flex", flexDirection: "column" };
+  const questionStyle = { backgroundColor: "#fdf6e3", padding: "15px", borderRadius: "12px", marginBottom: "20px", border: "1px solid #e0d5c2" };
+  const navButtonStyle = { padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer", backgroundColor: "#f5e6c7", color: "#000" };
+  const inputStyle = { width: "100%", padding: "8px", marginTop: "10px", borderRadius: "6px", border: "1px solid #ccc", fontSize: "14px" };
 
   return (
     <div style={pageStyle}>
@@ -115,54 +70,49 @@ print(pair1, pair2)
 
       <div style={questionStyle}>
         <p>{questionText}</p>
+        {/* Visible Input fields */}
+        <input
+          type="text"
+          value={number1}
+          onChange={(e) => setNumber1(e.target.value)}
+          placeholder="Enter first even number"
+          style={inputStyle}
+        />
+        <input
+          type="text"
+          value={number2}
+          onChange={(e) => setNumber2(e.target.value)}
+          placeholder="Enter second even number"
+          style={inputStyle}
+        />
       </div>
 
       <div style={contentStyle}>
-        {/* Code Section */}
         <div style={codeStyle}>
           <button
             onClick={copyToClipboard}
-            style={{
-              position: "absolute",
-              top: "10px",
-              right: "10px",
-              padding: "6px 12px",
-              borderRadius: "6px",
-              border: "none",
-              backgroundColor: "#888",
-              color: "#fff",
-              cursor: "pointer",
-            }}
+            style={{ position: "absolute", top: "10px", right: "10px", padding: "6px 12px", borderRadius: "6px", border: "none", backgroundColor: "#888", color: "#fff", cursor: "pointer" }}
           >
             Copy
           </button>
           <pre>{pythonCode}</pre>
-
-          {/* Run Code Button under the code */}
           <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-            <button onClick={runCode} style={navButtonStyle}>
-              Run Code
-            </button>
+            <button onClick={runCode} style={navButtonStyle}>Run Code</button>
           </div>
         </div>
 
-        {/* Output Section */}
         <div style={outputStyle}>
           {loading ? (
             <p>Loading...</p>
           ) : data ? (
             <>
               <p>
-                Goldbach for {data.numbers[0]}: ({data.pairs[0][0]},{" "}
-                {data.pairs[0][1]})
+                Goldbach for {number1}: ({data.pairs[0][0]}, {data.pairs[0][1]})
               </p>
               <p>
-                Goldbach for {data.numbers[1]}: ({data.pairs[1][0]},{" "}
-                {data.pairs[1][1]})
+                Goldbach for {number2}: ({data.pairs[1][0]}, {data.pairs[1][1]})
               </p>
-              {data.runtime_seconds && (
-                <p>Time taken: {data.runtime_seconds} seconds</p>
-              )}
+              {data.runtime_seconds && <p>Time taken: {data.runtime_seconds} seconds</p>}
             </>
           ) : (
             <p>Click "Run Code" under the code to see the output</p>
@@ -170,21 +120,10 @@ print(pair1, pair2)
         </div>
       </div>
 
-      {/* Navigation Buttons */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "20px",
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
         <div style={{ display: "flex", gap: "10px" }}>
-          <button style={navButtonStyle} onClick={() => navigate("/")}>
-            Home
-          </button>
-          <button style={navButtonStyle} onClick={() => navigate("/q6")}>
-            ← Previous
-          </button>
+          <button style={navButtonStyle} onClick={() => navigate("/")}>Home</button>
+          <button style={navButtonStyle} onClick={() => navigate("/q6")}>← Previous</button>
         </div>
       </div>
 

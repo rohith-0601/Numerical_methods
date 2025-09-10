@@ -42,8 +42,12 @@ def api_q6():
     # Call q6() which reads `p_values` from query string
     result = q6()
     return jsonify(result)
+
 @app.route("/api/q7")
-def api_q7(): return jsonify(q7())
+def api_q7():
+    N1 = request.args.get("N1")
+    N2 = request.args.get("N2")
+    return jsonify(q7(N1, N2))
 
 if __name__ == "__main__":
     app.run(debug=True)
