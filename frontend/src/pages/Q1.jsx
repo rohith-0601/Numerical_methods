@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +8,8 @@ function Q1() {
   const [loading, setLoading] = useState(false);
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [eventSource, setEventSource] = useState(null);
+  const [rangeStart, setRangeStart] = useState(1000);
+  const [rangeEnd, setRangeEnd] = useState(3000);
 
   const navigate = useNavigate();
 
@@ -21,13 +22,15 @@ function Q1() {
     return () => clearInterval(timer);
   }, [loading]);
 
-  // Start EventSource on Run Code click
+  // Run Code Event
   const runCode = () => {
     setData(null);
     setTimeElapsed(0);
     setLoading(true);
 
-    const source = new EventSource("http://127.0.0.1:5000/api/q1/stream");
+    const source = new EventSource(
+      `http://127.0.0.1:5000/api/q1/stream?start=${rangeStart}&end=${rangeEnd}`
+    );
     setEventSource(source);
 
     source.onmessage = (e) => {
@@ -146,8 +149,37 @@ Find the next number that follows this pattern. That number n lies between 1000 
           </button>
           <pre>{pythonCode}</pre>
 
-          {/* Run Code Button under the code */}
-          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+          {/* Range Inputs */}
+          <div
+            style={{
+              marginTop: "20px",
+              marginBottom: "10px",
+              display: "flex",
+              gap: "10px",
+            }}
+          >
+            <label>
+              Start:
+              <input
+                type="number"
+                value={rangeStart}
+                onChange={(e) => setRangeStart(Number(e.target.value))}
+                style={{ marginLeft: "5px", width: "80px" }}
+              />
+            </label>
+            <label>
+              End:
+              <input
+                type="number"
+                value={rangeEnd}
+                onChange={(e) => setRangeEnd(Number(e.target.value))}
+                style={{ marginLeft: "5px", width: "80px" }}
+              />
+            </label>
+          </div>
+
+          {/* Run Code Button */}
+          <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
             <button onClick={runCode} style={navButtonStyle}>
               Run Code
             </button>

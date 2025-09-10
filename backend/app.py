@@ -1,4 +1,4 @@
-from flask import Flask, Response, jsonify
+from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 from controllers.questionController import q1_stream, q2, q3, q4, q5, q6, q7
 
@@ -8,11 +8,15 @@ CORS(app)  # Allow React frontend to fetch
 # SSE endpoint for Q1
 @app.route("/api/q1/stream")
 def api_q1_stream():
-    return Response(q1_stream(), mimetype="text/event-stream")
+    start = int(request.args.get("start", 1000))
+    end = int(request.args.get("end", 3000))
+    return Response(q1_stream(start=start, end=end), mimetype="text/event-stream")
 
 @app.route("/api/q2")
-def api_q2(): 
-    return jsonify(q2())
+def api_q2():
+    start = int(request.args.get("start", 2))
+    end = int(request.args.get("end", 1040))
+    return jsonify(q2(start=start, end=end))
 
 @app.route("/api/q3")
 def api_q3(): 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 function Q3() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [startP, setStartP] = useState(2201);
+  const [endP, setEndP] = useState(2299);
 
   const navigate = useNavigate();
 
@@ -41,7 +43,7 @@ for p in range(2201, 2300):
     setLoading(true);
 
     axios
-      .get("http://127.0.0.1:5000/api/q3")
+      .get(`http://127.0.0.1:5000/api/q3?start=${startP}&end=${endP}`)
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -138,8 +140,34 @@ for p in range(2201, 2300):
           </button>
           <pre>{pythonCode}</pre>
 
-          {/* Run Code Button under the code */}
-          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+          {/* Inputs + Run Code */}
+          <div
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              gap: "10px",
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
+          >
+            <label>
+              Start p:
+              <input
+                type="number"
+                value={startP}
+                onChange={(e) => setStartP(Number(e.target.value))}
+                style={{ marginLeft: "5px", width: "80px" }}
+              />
+            </label>
+            <label>
+              End p:
+              <input
+                type="number"
+                value={endP}
+                onChange={(e) => setEndP(Number(e.target.value))}
+                style={{ marginLeft: "5px", width: "80px" }}
+              />
+            </label>
             <button onClick={runCode} style={navButtonStyle}>
               Run Code
             </button>

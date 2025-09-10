@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 function Q2() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [startN, setStartN] = useState(2);
+  const [endN, setEndN] = useState(1040);
 
   const navigate = useNavigate();
 
@@ -42,7 +44,7 @@ for n, Rn in repunit_primes:
     setLoading(true);
 
     axios
-      .get("http://127.0.0.1:5000/api/q2")
+      .get(`http://127.0.0.1:5000/api/q2?start=${startN}&end=${endN}`)
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -54,7 +56,6 @@ for n, Rn in repunit_primes:
       });
   };
 
-  // --- Colors and styles from Q5 ---
   const pageStyle = {
     display: "flex",
     flexDirection: "column",
@@ -140,7 +141,33 @@ for n, Rn in repunit_primes:
           </button>
           <pre>{pythonCode}</pre>
 
-          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+          {/* Inputs + Run Code */}
+          <div
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              gap: "10px",
+              flexWrap: "wrap",
+            }}
+          >
+            <label>
+              Start N:
+              <input
+                type="number"
+                value={startN}
+                onChange={(e) => setStartN(Number(e.target.value))}
+                style={{ marginLeft: "5px", width: "80px" }}
+              />
+            </label>
+            <label>
+              End N:
+              <input
+                type="number"
+                value={endN}
+                onChange={(e) => setEndN(Number(e.target.value))}
+                style={{ marginLeft: "5px", width: "80px" }}
+              />
+            </label>
             <button onClick={runCode} style={navButtonStyle}>
               Run Code
             </button>

@@ -15,11 +15,12 @@ def kaprekar_number(n: int) -> int:
         num = num * (10 ** len(str(i))) + i
     return num
 
-def q1_stream():
+def q1_stream(start=1000, end=3000):
     start_time = time.time()
-    for n in range(1000, 3001):
+    for n in range(start, end + 1):
         candidate = kaprekar_number(n)
         elapsed = round(time.time() - start_time, 2)
+        # Send progress
         yield f"data: {{\"current_n\": {n}, \"runtime_seconds\": {elapsed}}}\n\n"
         if gmpy2.is_prime(candidate):
             yield f"data: {{\"found\": true, \"n\": {n}, \"kaprekar_number\": \"{candidate}\", \"runtime_seconds\": {elapsed}}}\n\n"
@@ -29,10 +30,10 @@ def q1_stream():
 def repunit(n):
     return int("1" * n)
 
-def q2():
+def q2(start=2, end=1040):
     start_time = time.time()
     repunit_primes = []
-    for n in primerange(2, 1041):
+    for n in primerange(start, end + 1):
         Rn = repunit(n)
         if isprime(Rn):
             repunit_primes.append({"n": n, "repunit": str(Rn)})
@@ -112,8 +113,8 @@ def q6():
         mersennes = LAST_Q3["mersenne_primes"]
     else:
         mersennes = [
-            {"p": 2203, "mersenne_number": str(mpz(2)**2203 - 1)},
-            {"p": 2281, "mersenne_number": str(mpz(2)**2281 - 1)}
+            {"p": 2, "mersenne_number": str(mpz(2)**2 - 1)},
+            {"p": 3, "mersenne_number": str(mpz(2)**3 - 1)}
         ]
 
     perfect_numbers = []
