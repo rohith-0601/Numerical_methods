@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function Q6() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -22,7 +22,15 @@ def perfect_number_from_mersenne(p, M_p):
     print(N, sigma_val, 2*N)
 `;
 
-  useEffect(() => {
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(pythonCode);
+    toast.success("Code copied to clipboard!");
+  };
+
+  const runCode = () => {
+    setData(null);
+    setLoading(true);
+
     axios
       .get("http://127.0.0.1:5000/api/q6")
       .then((res) => {
@@ -34,7 +42,7 @@ def perfect_number_from_mersenne(p, M_p):
         toast.error("Failed to fetch Q6 data");
         setLoading(false);
       });
-  }, []);
+  };
 
   const pageStyle = {
     display: "flex",
@@ -74,6 +82,8 @@ def perfect_number_from_mersenne(p, M_p):
     maxHeight: "400px",
     overflowY: "auto",
     wordBreak: "break-word",
+    display: "flex",
+    flexDirection: "column",
   };
 
   const questionStyle = {
@@ -84,25 +94,14 @@ def perfect_number_from_mersenne(p, M_p):
     border: "1px solid #d5d5ec",
   };
 
-  const buttonStyle = {
+  const navButtonStyle = {
     padding: "10px 20px",
     borderRadius: "8px",
     border: "none",
-    cursor: "pointer",
     fontWeight: "bold",
+    cursor: "pointer",
     backgroundColor: "#b3b3ff",
     color: "#000",
-  };
-
-  const bottomButtons = {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "20px",
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(pythonCode);
-    toast.success("Code copied to clipboard!");
   };
 
   return (
@@ -118,11 +117,28 @@ def perfect_number_from_mersenne(p, M_p):
         <div style={codeStyle}>
           <button
             onClick={copyToClipboard}
-            style={{ position: "absolute", top: "10px", right: "10px" }}
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              padding: "6px 12px",
+              borderRadius: "6px",
+              border: "none",
+              backgroundColor: "#888",
+              color: "#fff",
+              cursor: "pointer",
+            }}
           >
             Copy
           </button>
           <pre>{pythonCode}</pre>
+
+          {/* Run Code Button under the code */}
+          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <button onClick={runCode} style={navButtonStyle}>
+              Run Code
+            </button>
+          </div>
         </div>
 
         {/* Output Section */}
@@ -135,13 +151,18 @@ def perfect_number_from_mersenne(p, M_p):
                 Perfect Number for p={item.p}: {item.perfect_number}
               </p>
             ))
+          ) : data ? (
+            <p>{data?.message || "No perfect numbers found."}</p>
           ) : (
-            <p>No perfect numbers found.</p>
+            <p>Click "Run Code" under the code to see the output</p>
           )}
-          {!loading && <p>Time taken: {data?.runtime_seconds} seconds</p>}
+          {!loading && data?.runtime_seconds && (
+            <p>Time taken: {data.runtime_seconds} seconds</p>
+          )}
         </div>
       </div>
 
+      {/* Navigation Buttons */}
       <div
         style={{
           display: "flex",
@@ -150,14 +171,14 @@ def perfect_number_from_mersenne(p, M_p):
         }}
       >
         <div style={{ display: "flex", gap: "10px" }}>
-          <button style={buttonStyle} onClick={() => navigate("/")}>
+          <button style={navButtonStyle} onClick={() => navigate("/")}>
             Home
           </button>
-          <button style={buttonStyle} onClick={() => navigate("/q5")}>
+          <button style={navButtonStyle} onClick={() => navigate("/q5")}>
             ← Previous
           </button>
         </div>
-        <button style={buttonStyle} onClick={() => navigate("/q7")}>
+        <button style={navButtonStyle} onClick={() => navigate("/q7")}>
           Next →
         </button>
       </div>

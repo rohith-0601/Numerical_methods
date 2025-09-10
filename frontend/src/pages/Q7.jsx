@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 function Q7() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const questionText = `7. Goldbach's Conjecture (b): Every even number > 2 is the sum of two primes.
 Here we test it for two 50+ digit even numbers.`;
@@ -32,7 +32,14 @@ pair2 = goldbach_pair(N2)
 print(pair1, pair2)
 `;
 
-  useEffect(() => {
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(pythonCode);
+    toast.success("Code copied to clipboard!");
+  };
+
+  const runCode = () => {
+    setData(null);
+    setLoading(true);
     axios
       .get("http://127.0.0.1:5000/api/q7")
       .then((res) => {
@@ -44,7 +51,7 @@ print(pair1, pair2)
         toast.error("Failed to fetch Q7 data");
         setLoading(false);
       });
-  }, []);
+  };
 
   const pageStyle = {
     display: "flex",
@@ -56,11 +63,7 @@ print(pair1, pair2)
     boxSizing: "border-box",
   };
 
-  const contentStyle = {
-    display: "flex",
-    flex: 1,
-    gap: "20px",
-  };
+  const contentStyle = { display: "flex", flex: 1, gap: "20px" };
 
   const codeStyle = {
     flex: 1,
@@ -84,6 +87,8 @@ print(pair1, pair2)
     maxHeight: "400px",
     overflowY: "auto",
     wordBreak: "break-word",
+    display: "flex",
+    flexDirection: "column",
   };
 
   const questionStyle = {
@@ -94,25 +99,14 @@ print(pair1, pair2)
     border: "1px solid #e0d5c2",
   };
 
-  const buttonStyle = {
+  const navButtonStyle = {
     padding: "10px 20px",
     borderRadius: "8px",
     border: "none",
-    cursor: "pointer",
     fontWeight: "bold",
+    cursor: "pointer",
     backgroundColor: "#f5e6c7",
     color: "#000",
-  };
-
-  const bottomButtons = {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "20px",
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(pythonCode);
-    toast.success("Code copied to clipboard!");
   };
 
   return (
@@ -124,16 +118,35 @@ print(pair1, pair2)
       </div>
 
       <div style={contentStyle}>
+        {/* Code Section */}
         <div style={codeStyle}>
           <button
             onClick={copyToClipboard}
-            style={{ position: "absolute", top: "10px", right: "10px" }}
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              padding: "6px 12px",
+              borderRadius: "6px",
+              border: "none",
+              backgroundColor: "#888",
+              color: "#fff",
+              cursor: "pointer",
+            }}
           >
             Copy
           </button>
           <pre>{pythonCode}</pre>
+
+          {/* Run Code Button under the code */}
+          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <button onClick={runCode} style={navButtonStyle}>
+              Run Code
+            </button>
+          </div>
         </div>
 
+        {/* Output Section */}
         <div style={outputStyle}>
           {loading ? (
             <p>Loading...</p>
@@ -147,14 +160,17 @@ print(pair1, pair2)
                 Goldbach for {data.numbers[1]}: ({data.pairs[1][0]},{" "}
                 {data.pairs[1][1]})
               </p>
-              <p>Time taken: {data.runtime_seconds} seconds</p>
+              {data.runtime_seconds && (
+                <p>Time taken: {data.runtime_seconds} seconds</p>
+              )}
             </>
           ) : (
-            <p>No data found.</p>
+            <p>Click "Run Code" under the code to see the output</p>
           )}
         </div>
       </div>
 
+      {/* Navigation Buttons */}
       <div
         style={{
           display: "flex",
@@ -163,10 +179,10 @@ print(pair1, pair2)
         }}
       >
         <div style={{ display: "flex", gap: "10px" }}>
-          <button style={buttonStyle} onClick={() => navigate("/")}>
+          <button style={navButtonStyle} onClick={() => navigate("/")}>
             Home
           </button>
-          <button style={buttonStyle} onClick={() => window.history.back()}>
+          <button style={navButtonStyle} onClick={() => navigate("/q6")}>
             ← Previous
           </button>
         </div>

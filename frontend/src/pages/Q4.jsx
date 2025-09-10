@@ -103,12 +103,14 @@ for p in primes:
     marginBottom: "20px",
   };
 
-  const buttonStyle = {
+  const navButtonStyle = {
     padding: "10px 20px",
     borderRadius: "8px",
     border: "none",
-    cursor: "pointer",
     fontWeight: "bold",
+    cursor: "pointer",
+    backgroundColor: "#8888ff",
+    color: "#000",
   };
 
   return (
@@ -124,29 +126,32 @@ for p in primes:
         <div style={codeStyle}>
           <button
             onClick={copyToClipboard}
-            style={{ position: "absolute", top: "10px", right: "10px" }}
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              padding: "6px 12px",
+              borderRadius: "6px",
+              border: "none",
+              backgroundColor: "#888",
+              color: "#fff",
+              cursor: "pointer",
+            }}
           >
             Copy
           </button>
           <pre>{pythonCode}</pre>
+
+          {/* Run Code Button under the code */}
+          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <button onClick={runCode} style={navButtonStyle}>
+              Run Code
+            </button>
+          </div>
         </div>
 
         {/* Output Section */}
         <div style={outputStyle}>
-          <button
-            onClick={runCode}
-            style={{
-              marginBottom: "20px",
-              padding: "10px 20px",
-              borderRadius: "8px",
-              border: "none",
-              fontWeight: "bold",
-              cursor: "pointer",
-            }}
-          >
-            Run Code
-          </button>
-
           {loading ? (
             <p>Loading...</p>
           ) : data?.primes?.length > 0 ? (
@@ -154,7 +159,7 @@ for p in primes:
           ) : data ? (
             <p>No primes found.</p>
           ) : (
-            <p>Click "Run Code" to see the output</p>
+            <p>Click "Run Code" under the code to see the output</p>
           )}
 
           {!loading && data?.runtime_seconds && (
@@ -163,6 +168,7 @@ for p in primes:
         </div>
       </div>
 
+      {/* Navigation Buttons */}
       <div
         style={{
           display: "flex",
@@ -171,14 +177,14 @@ for p in primes:
         }}
       >
         <div style={{ display: "flex", gap: "10px" }}>
-          <button style={buttonStyle} onClick={() => navigate("/")}>
+          <button style={navButtonStyle} onClick={() => navigate("/")}>
             Home
           </button>
-          <button style={buttonStyle} onClick={() => navigate("/q3")}>
+          <button style={navButtonStyle} onClick={() => navigate("/q3")}>
             ← Previous
           </button>
         </div>
-        <button style={buttonStyle} onClick={() => navigate("/q5")}>
+        <button style={navButtonStyle} onClick={() => navigate("/q5")}>
           Next →
         </button>
       </div>

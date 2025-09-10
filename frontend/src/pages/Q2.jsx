@@ -91,40 +91,62 @@ for n, Rn in repunit_primes:
     flexDirection: "column",
   };
 
-  const buttonStyle = {
+  const navButtonStyle = {
     padding: "10px 20px",
     borderRadius: "8px",
     border: "none",
-    cursor: "pointer",
     fontWeight: "bold",
+    cursor: "pointer",
+    backgroundColor: "#90ebabff",
+    color: "#100202ff",
   };
 
   return (
     <div style={pageStyle}>
       <h1>Question 2</h1>
 
-      <div style={{ backgroundColor: "#90ebabff", padding: "15px", borderRadius: "12px", marginBottom: "20px" }}>
+      <div
+        style={{
+          backgroundColor: "#90ebabff",
+          padding: "15px",
+          borderRadius: "12px",
+          marginBottom: "20px",
+        }}
+      >
         <p>{questionText}</p>
       </div>
 
       <div style={contentStyle}>
         {/* Code Section */}
         <div style={codeStyle}>
-          <button onClick={copyToClipboard} style={{ position: "absolute", top: "10px", right: "10px" }}>
+          <button
+            onClick={copyToClipboard}
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              padding: "6px 12px",
+              borderRadius: "6px",
+              border: "none",
+              backgroundColor: "#888",
+              color: "#fff",
+              cursor: "pointer",
+            }}
+          >
             Copy
           </button>
           <pre>{pythonCode}</pre>
+
+          {/* Run Code Button under the code */}
+          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <button onClick={runCode} style={navButtonStyle}>
+              Run Code
+            </button>
+          </div>
         </div>
 
         {/* Output Section */}
         <div style={outputStyle}>
-          <button
-            onClick={runCode}
-            style={{ marginBottom: "20px", padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}
-          >
-            Run Code
-          </button>
-
           {loading ? (
             <p>Loading...</p>
           ) : data ? (
@@ -140,21 +162,28 @@ for n, Rn in repunit_primes:
               <p>Time taken: {data.runtime_seconds} seconds</p>
             </>
           ) : (
-            <p>Click "Run Code" to see the output</p>
+            <p>Click "Run Code" under the code to see the output</p>
           )}
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+      {/* Navigation Buttons */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "20px",
+        }}
+      >
         <div style={{ display: "flex", gap: "10px" }}>
-          <button style={buttonStyle} onClick={() => navigate("/")}>
+          <button style={navButtonStyle} onClick={() => navigate("/")}>
             Home
           </button>
-          <button style={buttonStyle} onClick={() => navigate("/q1")}>
+          <button style={navButtonStyle} onClick={() => navigate("/q1")}>
             ← Previous
           </button>
         </div>
-        <button style={buttonStyle} onClick={() => navigate("/q3")}>
+        <button style={navButtonStyle} onClick={() => navigate("/q3")}>
           Next →
         </button>
       </div>

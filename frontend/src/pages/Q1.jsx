@@ -81,62 +81,150 @@ Find the next number that follows this pattern. That number n lies between 1000 
     toast.success("Code copied to clipboard!");
   };
 
+  const navButtonStyle = {
+    padding: "10px 20px",
+    borderRadius: "8px",
+    border: "none",
+    fontWeight: "bold",
+    cursor: "pointer",
+    backgroundColor: "#c19a83ff",
+    color: "#fff",
+  };
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh", backgroundColor: "#f7e0d3", padding: "20px" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        backgroundColor: "#f7e0d3",
+        padding: "20px",
+      }}
+    >
       <h1>Question 1</h1>
-      <div style={{ backgroundColor: "#c19a83ff", padding: "15px", borderRadius: "12px", marginBottom: "20px" }}>
+
+      {/* Question Box */}
+      <div
+        style={{
+          backgroundColor: "#c19a83ff",
+          padding: "15px",
+          borderRadius: "12px",
+          marginBottom: "20px",
+        }}
+      >
         <p>{questionText}</p>
       </div>
 
       <div style={{ display: "flex", gap: "20px", flex: 1 }}>
         {/* Code Section */}
-        <div style={{ flex: 1, backgroundColor: "#ebe2d5ff", padding: "20px", borderRadius: "12px", overflowY: "auto", fontFamily: "monospace", position: "relative" }}>
-          <button onClick={copyToClipboard} style={{ position: "absolute", top: "10px", right: "10px" }}>Copy</button>
+        <div
+          style={{
+            flex: 1,
+            backgroundColor: "#ebe2d5ff",
+            padding: "20px",
+            borderRadius: "12px",
+            overflowY: "auto",
+            fontFamily: "monospace",
+            position: "relative",
+          }}
+        >
+          <button
+            onClick={copyToClipboard}
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              padding: "6px 12px",
+              borderRadius: "6px",
+              border: "none",
+              backgroundColor: "#888",
+              color: "#fff",
+              cursor: "pointer",
+            }}
+          >
+            Copy
+          </button>
           <pre>{pythonCode}</pre>
+
+          {/* Run Code Button under the code */}
+          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <button onClick={runCode} style={navButtonStyle}>
+              Run Code
+            </button>
+          </div>
         </div>
 
         {/* Output Section */}
-        <div style={{ flex: 1, backgroundColor: "#d4cacab0", padding: "20px", borderRadius: "12px", fontFamily: "monospace", display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
-          <button onClick={runCode} style={{ marginBottom: "20px", padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}>
-            Run Code
-          </button>
-
+        <div
+          style={{
+            flex: 1,
+            backgroundColor: "#d4cacab0",
+            padding: "20px",
+            borderRadius: "12px",
+            fontFamily: "monospace",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+          }}
+        >
           {loading ? (
             <>
-              <div style={{ marginBottom: "20px" }}>
-                <div style={{
+              <div
+                style={{
+                  marginBottom: "20px",
                   border: "6px solid #f3f3f3",
                   borderTop: "6px solid #FFA500",
                   borderRadius: "50%",
                   width: "50px",
                   height: "50px",
-                  animation: "spin 1s linear infinite"
-                }} />
-              </div>
+                  animation: "spin 1s linear infinite",
+                }}
+              />
               <p>Loading... {timeElapsed}s</p>
             </>
           ) : data ? (
             <>
               <p>✅ Output:</p>
               <p>n = {data.n}</p>
-              <div style={{ maxHeight: "250px", overflowY: "auto", backgroundColor: "#f0e5d3", padding: "10px", borderRadius: "8px", wordBreak: "break-all" }}>
+              <div
+                style={{
+                  maxHeight: "250px",
+                  overflowY: "auto",
+                  backgroundColor: "#f0e5d3",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  wordBreak: "break-all",
+                }}
+              >
                 Kaprekar Number = {data.kaprekar_number}
               </div>
               <p>Time taken: {data.runtime_seconds} seconds</p>
             </>
           ) : (
-            <p>Click "Run Code" to see the output</p>
+            <p>Click "Run Code" under the code to see the output</p>
           )}
         </div>
       </div>
 
       {/* Navigation Buttons */}
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "20px",
+        }}
+      >
         <div style={{ display: "flex", gap: "10px" }}>
-          <button onClick={() => navigate("/")} style={{ padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}>Home</button>
-          <button onClick={() => navigate("/")} style={{ padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}>← Previous</button>
+          <button onClick={() => navigate("/")} style={navButtonStyle}>
+            Home
+          </button>
+          <button onClick={() => navigate("/")} style={navButtonStyle}>
+            ← Previous
+          </button>
         </div>
-        <button onClick={() => navigate("/q2")} style={{ padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}>Next →</button>
+        <button onClick={() => navigate("/q2")} style={navButtonStyle}>
+          Next →
+        </button>
       </div>
 
       <ToastContainer position="top-right" autoClose={2000} />
