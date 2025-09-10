@@ -73,13 +73,28 @@ def q3(start=2201, end=2300):
 
 
 # -------- Q4: Brocard's conjecture using Q3 results --------
+from flask import request
+from gmpy2 import mpz, next_prime
+import time
+
 def q4():
     start_time = time.time()
-    if LAST_Q3 and LAST_Q3.get("mersenne_primes") and len(LAST_Q3["mersenne_primes"]) >= 2:
-        mersennes = LAST_Q3["mersenne_primes"]
-        M1 = mpz(mersennes[0]["mersenne_number"])
-        M2 = mpz(mersennes[1]["mersenne_number"])
-    else:
+
+    # Get optional query parameters
+    try:
+        M1_input = request.args.get("startP")
+        M2_input = request.args.get("endP")
+        if M1_input and M2_input:
+            M1 = mpz(M1_input)
+            M2 = mpz(M2_input)
+        elif LAST_Q3 and LAST_Q3.get("mersenne_primes") and len(LAST_Q3["mersenne_primes"]) >= 2:
+            mersennes = LAST_Q3["mersenne_primes"]
+            M1 = mpz(mersennes[0]["mersenne_number"])
+            M2 = mpz(mersennes[1]["mersenne_number"])
+        else:
+            M1 = mpz(2)**2203 - 1
+            M2 = mpz(2)**2281 - 1
+    except Exception:
         M1 = mpz(2)**2203 - 1
         M2 = mpz(2)**2281 - 1
 
@@ -90,6 +105,7 @@ def q4():
     while candidate < high and len(primes) < 4:
         primes.append(candidate)
         candidate = next_prime(candidate)
+
     elapsed = round(time.time() - start_time, 2)
     return {"primes": [str(p) for p in primes], "runtime_seconds": elapsed}
 
