@@ -41,6 +41,7 @@ def q2(start=2, end=1040):
     return {"repunit_primes": repunit_primes, "runtime_seconds": elapsed}
 
 # -------- Q3: Mersenne primes --------
+# questionController.py
 LAST_Q3 = None
 
 def lucas_lehmer(p):
@@ -52,18 +53,24 @@ def lucas_lehmer(p):
         s = (s * s - 2) % M
     return s == 0
 
-def q3():
+def q3(start=2201, end=2300):
+    """
+    Find Mersenne primes for p in the range [start, end)
+    """
     global LAST_Q3
     start_time = time.time()
     mersenne_primes = []
-    for p in range(2201, 2300):
+
+    for p in range(start, end):
         if gmpy2.is_prime(p) and lucas_lehmer(p):
             M = gmpy2.mpz(2)**p - 1
             mersenne_primes.append({"p": p, "mersenne_number": str(M)})
+
     elapsed = round(time.time() - start_time, 2)
     result = {"mersenne_primes": mersenne_primes, "runtime_seconds": elapsed}
     LAST_Q3 = result
     return result
+
 
 # -------- Q4: Brocard's conjecture using Q3 results --------
 def q4():

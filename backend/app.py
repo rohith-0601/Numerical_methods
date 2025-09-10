@@ -18,9 +18,13 @@ def api_q2():
     end = int(request.args.get("end", 1040))
     return jsonify(q2(start=start, end=end))
 
+# app.py
 @app.route("/api/q3")
 def api_q3(): 
-    return jsonify(q3())
+    start = int(request.args.get("start", 2201))
+    end = int(request.args.get("end", 2300))
+    return jsonify(q3(start=start, end=end))
+
 
 @app.route("/api/q4")
 def api_q4(): return jsonify(q4())
