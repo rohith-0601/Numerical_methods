@@ -54,23 +54,33 @@ for n, Rn in repunit_primes:
       });
   };
 
+  // --- Colors and styles from Q5 ---
   const pageStyle = {
     display: "flex",
     flexDirection: "column",
     height: "100vh",
-    backgroundColor: "#d1f3e0",
+    backgroundColor: "#e0f2f7",
     color: "#000",
     padding: "20px",
     boxSizing: "border-box",
+  };
+
+  const questionStyle = {
+    backgroundColor: "#d0f0fb",
+    padding: "15px",
+    borderRadius: "12px",
+    marginBottom: "20px",
+    border: "1px solid #d5e5f0",
   };
 
   const contentStyle = { display: "flex", flex: 1, gap: "20px" };
 
   const codeStyle = {
     flex: 1,
-    backgroundColor: "#b4eab1ff",
+    backgroundColor: "#e0f2f7",
     padding: "20px",
     borderRadius: "12px",
+    border: "1px solid #d5e5f0",
     overflowY: "auto",
     fontFamily: "monospace",
     whiteSpace: "pre-wrap",
@@ -79,14 +89,14 @@ for n, Rn in repunit_primes:
 
   const outputStyle = {
     flex: 1,
-    backgroundColor: "#d1f3e0",
-    border: "1px solid #c2e9d2",
+    backgroundColor: "#e0f2f7",
+    border: "1px solid #d5e5f0",
     borderRadius: "12px",
     padding: "20px",
     fontFamily: "monospace",
     maxHeight: "400px",
     overflowY: "auto",
-    wordBreak: "break-all",
+    wordBreak: "break-word",
     display: "flex",
     flexDirection: "column",
   };
@@ -97,22 +107,15 @@ for n, Rn in repunit_primes:
     border: "none",
     fontWeight: "bold",
     cursor: "pointer",
-    backgroundColor: "#90ebabff",
-    color: "#100202ff",
+    backgroundColor: "#a0d8ef",
+    color: "#000",
   };
 
   return (
     <div style={pageStyle}>
       <h1>Question 2</h1>
 
-      <div
-        style={{
-          backgroundColor: "#90ebabff",
-          padding: "15px",
-          borderRadius: "12px",
-          marginBottom: "20px",
-        }}
-      >
+      <div style={questionStyle}>
         <p>{questionText}</p>
       </div>
 
@@ -137,7 +140,6 @@ for n, Rn in repunit_primes:
           </button>
           <pre>{pythonCode}</pre>
 
-          {/* Run Code Button under the code */}
           <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
             <button onClick={runCode} style={navButtonStyle}>
               Run Code

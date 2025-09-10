@@ -107,6 +107,16 @@ body, html {
 .lightBlueCard { background: #e6e6f5; border: 1px solid #d5d5ec; grid-area: lightBlue; }
 .beigeCard { background: #f1ebd8; border: 1px solid #e0d5c2; grid-area: beige; }
 
+/* ------------------- Individual Card Colors ------------------- */
+/* .orangeCard { background: #e6e6f5; border: 1px solid #d5d5ec; grid-area: lightBlue; }
+.greenCard { background: #e6e6f5; border: 1px solid #d5d5ec; grid-area: lightBlue; }
+.pinkCard { background: #e6e6f5; border: 1px solid #d5d5ec; grid-area: lightBlue; }
+.purpleCard { background: #e6e6f5; border: 1px solid #d5d5ec; grid-area: lightBlue; }
+.darkBlueCard { background: #e6e6f5; border: 1px solid #d5d5ec; grid-area: lightBlue; }
+.lightBlueCard { background: #e6e6f5; border: 1px solid #d5d5ec; grid-area: lightBlue; }
+.beigeCard { background: #e6e6f5; border: 1px solid #d5d5ec; grid-area: lightBlue; } */
+
+
 /* ------------------- Large Numbers & Text ------------------- */
 .largeNumber {
   font-size: 2rem;
