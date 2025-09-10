@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
-function Q1({ navigatePrev, navigateNext }) {
+function Q1() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [timeElapsed, setTimeElapsed] = useState(0);
+  const [eventSource, setEventSource] = useState(null);
+
+  const navigate = useNavigate();
 
   // Timer for loading
   useEffect(() => {
@@ -18,30 +21,32 @@ function Q1({ navigatePrev, navigateNext }) {
     return () => clearInterval(timer);
   }, [loading]);
 
-  // Fetch Q1 data from backend via EventSource (stream)
-  useEffect(() => {
-    const eventSource = new EventSource("http://127.0.0.1:5000/api/q1/stream");
+  // Start EventSource on Run Code click
+  const runCode = () => {
+    setData(null);
+    setTimeElapsed(0);
+    setLoading(true);
 
-    eventSource.onmessage = (e) => {
+    const source = new EventSource("http://127.0.0.1:5000/api/q1/stream");
+    setEventSource(source);
+
+    source.onmessage = (e) => {
       const parsed = JSON.parse(e.data);
       if (parsed.found) {
         setData(parsed);
         setLoading(false);
-        eventSource.close();
+        source.close();
       } else {
-        // Optional: show progress/time
         setTimeElapsed(parsed.runtime_seconds);
       }
     };
 
-    eventSource.onerror = (err) => {
+    source.onerror = (err) => {
       console.error("EventSource failed:", err);
       setLoading(false);
-      eventSource.close();
+      source.close();
     };
-
-    return () => eventSource.close();
-  }, []);
+  };
 
   const pythonCode = `
 import gmpy2
@@ -71,160 +76,71 @@ for n in range(1000, 3001):
 1 2 3 ... n (n-1) ... 3 2 1
 Find the next number that follows this pattern. That number n lies between 1000 and 3000.`;
 
-  // Copy code to clipboard with toast
   const copyToClipboard = () => {
     navigator.clipboard.writeText(pythonCode);
     toast.success("Code copied to clipboard!");
   };
 
-  // Page styles
-  const pageStyle = {
-    display: "flex",
-    flexDirection: "column",
-    height: "100vh",
-    backgroundColor: "#f7e0d3",
-    color: "#000",
-    padding: "20px",
-    boxSizing: "border-box",
-  };
-
-  const contentStyle = {
-    display: "flex",
-    flex: 1,
-    gap: "20px",
-  };
-
-  const codeStyle = {
-    flex: 1,
-    backgroundColor: "#ebe2d5ff",
-    padding: "20px",
-    borderRadius: "12px",
-    overflowY: "auto",
-    fontFamily: "monospace",
-    whiteSpace: "pre-wrap",
-    position: "relative",
-  };
-
-  const outputStyle = {
-    flex: 1,
-    backgroundColor: "#d4cacab0",
-    padding: "20px",
-    borderRadius: "12px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    fontFamily: "monospace",
-  };
-
-  const buttonStyle = {
-    padding: "10px 20px",
-    borderRadius: "8px",
-    border: "none",
-    cursor: "pointer",
-    fontWeight: "bold",
-  };
-
-  const bottomButtons = {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "20px",
-  };
-
-  const questionStyle = {
-    backgroundColor: "#c19a83ff",
-    padding: "15px",
-    borderRadius: "12px",
-    marginBottom: "20px",
-  };
-
-  const navigate = useNavigate();
-
   return (
-    <div style={pageStyle}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", backgroundColor: "#f7e0d3", padding: "20px" }}>
       <h1>Question 1</h1>
-      <div style={questionStyle}>
+      <div style={{ backgroundColor: "#c19a83ff", padding: "15px", borderRadius: "12px", marginBottom: "20px" }}>
         <p>{questionText}</p>
       </div>
 
-      <div style={contentStyle}>
+      <div style={{ display: "flex", gap: "20px", flex: 1 }}>
         {/* Code Section */}
-        <div style={codeStyle}>
-          <button
-            onClick={copyToClipboard}
-            style={{ position: "absolute", top: "10px", right: "10px" }}
-          >
-            Copy
-          </button>
+        <div style={{ flex: 1, backgroundColor: "#ebe2d5ff", padding: "20px", borderRadius: "12px", overflowY: "auto", fontFamily: "monospace", position: "relative" }}>
+          <button onClick={copyToClipboard} style={{ position: "absolute", top: "10px", right: "10px" }}>Copy</button>
           <pre>{pythonCode}</pre>
         </div>
 
         {/* Output Section */}
-        <div style={outputStyle}>
+        <div style={{ flex: 1, backgroundColor: "#d4cacab0", padding: "20px", borderRadius: "12px", fontFamily: "monospace", display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
+          <button onClick={runCode} style={{ marginBottom: "20px", padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}>
+            Run Code
+          </button>
+
           {loading ? (
             <>
-              <div className="loader" style={{ marginBottom: "20px" }}>
-                <div
-                  style={{
-                    border: "6px solid #f3f3f3",
-                    borderTop: "6px solid #FFA500",
-                    borderRadius: "50%",
-                    width: "50px",
-                    height: "50px",
-                    animation: "spin 1s linear infinite",
-                  }}
-                />
+              <div style={{ marginBottom: "20px" }}>
+                <div style={{
+                  border: "6px solid #f3f3f3",
+                  borderTop: "6px solid #FFA500",
+                  borderRadius: "50%",
+                  width: "50px",
+                  height: "50px",
+                  animation: "spin 1s linear infinite"
+                }} />
               </div>
               <p>Loading... {timeElapsed}s</p>
             </>
-          ) : (
+          ) : data ? (
             <>
               <p>✅ Output:</p>
               <p>n = {data.n}</p>
-              <div
-                style={{
-                  maxHeight: "250px",
-                  width: "100%",
-                  overflowY: "auto",
-                  backgroundColor: "#f0e5d3",
-                  padding: "10px",
-                  borderRadius: "8px",
-                  wordBreak: "break-all",
-                }}
-              >
+              <div style={{ maxHeight: "250px", overflowY: "auto", backgroundColor: "#f0e5d3", padding: "10px", borderRadius: "8px", wordBreak: "break-all" }}>
                 Kaprekar Number = {data.kaprekar_number}
               </div>
               <p>Time taken: {data.runtime_seconds} seconds</p>
             </>
+          ) : (
+            <p>Click "Run Code" to see the output</p>
           )}
         </div>
       </div>
 
-      {/* Bottom Buttons */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "20px",
-        }}
-      >
+      {/* Navigation Buttons */}
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
         <div style={{ display: "flex", gap: "10px" }}>
-          <button style={buttonStyle} onClick={() => navigate("/")}>
-            Home
-          </button>
-          <button style={buttonStyle} onClick={() => navigate("/")}>
-            ← Previous
-          </button>
+          <button onClick={() => navigate("/")} style={{ padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}>Home</button>
+          <button onClick={() => navigate("/")} style={{ padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}>← Previous</button>
         </div>
-        <button style={buttonStyle} onClick={() => navigate("/q2")}>
-          Next →
-        </button>
+        <button onClick={() => navigate("/q2")} style={{ padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}>Next →</button>
       </div>
 
-      {/* Toast container */}
       <ToastContainer position="top-right" autoClose={2000} />
 
-      {/* CSS spinner animation */}
       <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg);}

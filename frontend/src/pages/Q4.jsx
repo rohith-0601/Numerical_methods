@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function Q4() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -37,7 +37,15 @@ for p in primes:
     print(p)
 `;
 
-  useEffect(() => {
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(pythonCode);
+    toast.success("Code copied to clipboard!");
+  };
+
+  const runCode = () => {
+    setData(null);
+    setLoading(true);
+
     axios
       .get("http://127.0.0.1:5000/api/q4")
       .then((res) => {
@@ -49,27 +57,23 @@ for p in primes:
         toast.error("Failed to fetch Q4 data");
         setLoading(false);
       });
-  }, []);
+  };
 
   const pageStyle = {
     display: "flex",
     flexDirection: "column",
     height: "100vh",
-    backgroundColor: "#d3d3f5", // purpleCard page background
+    backgroundColor: "#d3d3f5",
     color: "#000",
     padding: "20px",
     boxSizing: "border-box",
   };
 
-  const contentStyle = {
-    display: "flex",
-    flex: 1,
-    gap: "20px",
-  };
+  const contentStyle = { display: "flex", flex: 1, gap: "20px" };
 
   const codeStyle = {
     flex: 1,
-    backgroundColor: "#bcbcff", // lighter purple
+    backgroundColor: "#bcbcff",
     padding: "20px",
     borderRadius: "12px",
     overflowY: "auto",
@@ -80,7 +84,7 @@ for p in primes:
 
   const outputStyle = {
     flex: 1,
-    backgroundColor: "#d3d3f5", // purpleCard background
+    backgroundColor: "#d3d3f5",
     border: "1px solid #c8c8ec",
     borderRadius: "12px",
     padding: "20px",
@@ -88,6 +92,15 @@ for p in primes:
     maxHeight: "400px",
     overflowY: "auto",
     wordBreak: "break-all",
+    display: "flex",
+    flexDirection: "column",
+  };
+
+  const questionStyle = {
+    backgroundColor: "#c8c8ec",
+    padding: "15px",
+    borderRadius: "12px",
+    marginBottom: "20px",
   };
 
   const buttonStyle = {
@@ -96,24 +109,6 @@ for p in primes:
     border: "none",
     cursor: "pointer",
     fontWeight: "bold",
-  };
-
-  const bottomButtons = {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "20px",
-  };
-
-  const questionStyle = {
-    backgroundColor: "#c8c8ec", // slightly lighter purple
-    padding: "15px",
-    borderRadius: "12px",
-    marginBottom: "20px",
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(pythonCode);
-    toast.success("Code copied to clipboard!");
   };
 
   return (
@@ -138,17 +133,32 @@ for p in primes:
 
         {/* Output Section */}
         <div style={outputStyle}>
+          <button
+            onClick={runCode}
+            style={{
+              marginBottom: "20px",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              border: "none",
+              fontWeight: "bold",
+              cursor: "pointer",
+            }}
+          >
+            Run Code
+          </button>
+
           {loading ? (
             <p>Loading...</p>
+          ) : data?.primes?.length > 0 ? (
+            data.primes.map((prime, idx) => <p key={idx}>{prime}</p>)
+          ) : data ? (
+            <p>No primes found.</p>
           ) : (
-            <>
-              {data.primes?.map((prime, idx) => (
-                <p key={idx}>{prime}</p>
-              ))}
-              {data.runtime_seconds && (
-                <p>Time taken: {data.runtime_seconds} seconds</p>
-              )}
-            </>
+            <p>Click "Run Code" to see the output</p>
+          )}
+
+          {!loading && data?.runtime_seconds && (
+            <p>Time taken: {data.runtime_seconds} seconds</p>
           )}
         </div>
       </div>

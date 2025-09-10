@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function Q5() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -37,7 +37,15 @@ pal_prime = find_palindromic_prime(50)
 print(pal_prime)
 `;
 
-  useEffect(() => {
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(pythonCode);
+    toast.success("Code copied to clipboard!");
+  };
+
+  const runCode = () => {
+    setData(null);
+    setLoading(true);
+
     axios
       .get("http://127.0.0.1:5000/api/q5")
       .then((res) => {
@@ -49,7 +57,7 @@ print(pal_prime)
         toast.error("Failed to fetch Q5 data");
         setLoading(false);
       });
-  }, []);
+  };
 
   const pageStyle = {
     display: "flex",
@@ -89,6 +97,8 @@ print(pal_prime)
     maxHeight: "400px",
     overflowY: "auto",
     wordBreak: "break-word",
+    display: "flex",
+    flexDirection: "column",
   };
 
   const questionStyle = {
@@ -107,17 +117,6 @@ print(pal_prime)
     fontWeight: "bold",
     backgroundColor: "#a0d8ef",
     color: "#000",
-  };
-
-  const bottomButtons = {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "20px",
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(pythonCode);
-    toast.success("Code copied to clipboard!");
   };
 
   return (
@@ -142,6 +141,20 @@ print(pal_prime)
 
         {/* Output Section */}
         <div style={outputStyle}>
+          <button
+            onClick={runCode}
+            style={{
+              marginBottom: "20px",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              border: "none",
+              fontWeight: "bold",
+              cursor: "pointer",
+            }}
+          >
+            Run Code
+          </button>
+
           {loading ? (
             <p>Loading...</p>
           ) : data?.palindromic_prime ? (
@@ -150,8 +163,10 @@ print(pal_prime)
               <p>Digits: {data.digits}</p>
               <p>Runtime: {data.runtime_seconds} seconds</p>
             </>
-          ) : (
+          ) : data ? (
             <p>{data?.message || "No data found."}</p>
+          ) : (
+            <p>Click "Run Code" to see the output</p>
           )}
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function Q3() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,7 +31,15 @@ for p in range(2201, 2300):
         print(f"M_{p} = 2^{p} - 1 is a Mersenne prime!")
 `;
 
-  useEffect(() => {
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(pythonCode);
+    toast.success("Code copied to clipboard!");
+  };
+
+  const runCode = () => {
+    setData(null);
+    setLoading(true);
+
     axios
       .get("http://127.0.0.1:5000/api/q3")
       .then((res) => {
@@ -43,7 +51,7 @@ for p in range(2201, 2300):
         toast.error("Failed to fetch Q3 data");
         setLoading(false);
       });
-  }, []);
+  };
 
   const pageStyle = {
     display: "flex",
@@ -55,11 +63,7 @@ for p in range(2201, 2300):
     boxSizing: "border-box",
   };
 
-  const contentStyle = {
-    display: "flex",
-    flex: 1,
-    gap: "20px",
-  };
+  const contentStyle = { display: "flex", flex: 1, gap: "20px" };
 
   const codeStyle = {
     flex: 1,
@@ -83,6 +87,8 @@ for p in range(2201, 2300):
     maxHeight: "400px",
     overflowY: "auto",
     wordBreak: "break-word",
+    display: "flex",
+    flexDirection: "column",
   };
 
   const questionStyle = {
@@ -101,17 +107,6 @@ for p in range(2201, 2300):
     fontWeight: "bold",
     backgroundColor: "#ffb6d1",
     color: "#000",
-  };
-
-  const bottomButtons = {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "20px",
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(pythonCode);
-    toast.success("Code copied to clipboard!");
   };
 
   return (
@@ -136,6 +131,13 @@ for p in range(2201, 2300):
 
         {/* Output Section */}
         <div style={outputStyle}>
+          <button
+            onClick={runCode}
+            style={{ marginBottom: "20px", padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}
+          >
+            Run Code
+          </button>
+
           {loading ? (
             <p>Loading...</p>
           ) : data?.mersenne_primes?.length > 0 ? (
@@ -144,20 +146,16 @@ for p in range(2201, 2300):
                 M<sub>{item.p}</sub> = {item.mersenne_number}
               </p>
             ))
-          ) : (
+          ) : data ? (
             <p>No Mersenne primes found.</p>
+          ) : (
+            <p>Click "Run Code" to see the output</p>
           )}
-          {!loading && <p>Time taken: {data?.runtime_seconds} seconds</p>}
+          {!loading && data && <p>Time taken: {data.runtime_seconds} seconds</p>}
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "20px",
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
         <div style={{ display: "flex", gap: "10px" }}>
           <button style={buttonStyle} onClick={() => navigate("/")}>
             Home

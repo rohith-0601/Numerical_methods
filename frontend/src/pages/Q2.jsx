@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function Q2() {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -32,7 +32,15 @@ for n, Rn in repunit_primes:
     print(f"1_{n} = {Rn}")
 `;
 
-  useEffect(() => {
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(pythonCode);
+    toast.success("Code copied to clipboard!");
+  };
+
+  const runCode = () => {
+    setData(null);
+    setLoading(true);
+
     axios
       .get("http://127.0.0.1:5000/api/q2")
       .then((res) => {
@@ -44,23 +52,19 @@ for n, Rn in repunit_primes:
         toast.error("Failed to fetch Q2 data");
         setLoading(false);
       });
-  }, []);
+  };
 
   const pageStyle = {
     display: "flex",
     flexDirection: "column",
     height: "100vh",
-    backgroundColor: "#d1f3e0", // entire page background green
+    backgroundColor: "#d1f3e0",
     color: "#000",
     padding: "20px",
     boxSizing: "border-box",
   };
 
-  const contentStyle = {
-    display: "flex",
-    flex: 1,
-    gap: "20px",
-  };
+  const contentStyle = { display: "flex", flex: 1, gap: "20px" };
 
   const codeStyle = {
     flex: 1,
@@ -75,7 +79,7 @@ for n, Rn in repunit_primes:
 
   const outputStyle = {
     flex: 1,
-    backgroundColor: "#d1f3e0", // greenCard background
+    backgroundColor: "#d1f3e0",
     border: "1px solid #c2e9d2",
     borderRadius: "12px",
     padding: "20px",
@@ -83,6 +87,8 @@ for n, Rn in repunit_primes:
     maxHeight: "400px",
     overflowY: "auto",
     wordBreak: "break-all",
+    display: "flex",
+    flexDirection: "column",
   };
 
   const buttonStyle = {
@@ -93,39 +99,18 @@ for n, Rn in repunit_primes:
     fontWeight: "bold",
   };
 
-  const bottomButtons = {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "20px",
-  };
-
-  const questionStyle = {
-    backgroundColor: "#90ebabff",
-    padding: "15px",
-    borderRadius: "12px",
-    marginBottom: "20px",
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(pythonCode);
-    toast.success("Code copied to clipboard!");
-  };
-
   return (
     <div style={pageStyle}>
       <h1>Question 2</h1>
 
-      <div style={questionStyle}>
+      <div style={{ backgroundColor: "#90ebabff", padding: "15px", borderRadius: "12px", marginBottom: "20px" }}>
         <p>{questionText}</p>
       </div>
 
       <div style={contentStyle}>
         {/* Code Section */}
         <div style={codeStyle}>
-          <button
-            onClick={copyToClipboard}
-            style={{ position: "absolute", top: "10px", right: "10px" }}
-          >
+          <button onClick={copyToClipboard} style={{ position: "absolute", top: "10px", right: "10px" }}>
             Copy
           </button>
           <pre>{pythonCode}</pre>
@@ -133,33 +118,34 @@ for n, Rn in repunit_primes:
 
         {/* Output Section */}
         <div style={outputStyle}>
+          <button
+            onClick={runCode}
+            style={{ marginBottom: "20px", padding: "10px 20px", borderRadius: "8px", border: "none", fontWeight: "bold", cursor: "pointer" }}
+          >
+            Run Code
+          </button>
+
           {loading ? (
             <p>Loading...</p>
-          ) : (
+          ) : data ? (
             <>
               {data.repunit_primes.map((item) => (
                 <p key={item.n}>
                   1<sub>{item.n}</sub> ={" "}
                   {item.repunit.length > 60
-                    ? `${item.repunit.slice(0, 30)}...${item.repunit.slice(
-                        -30
-                      )}`
+                    ? `${item.repunit.slice(0, 30)}...${item.repunit.slice(-30)}`
                     : item.repunit}
                 </p>
               ))}
               <p>Time taken: {data.runtime_seconds} seconds</p>
             </>
+          ) : (
+            <p>Click "Run Code" to see the output</p>
           )}
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "20px",
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
         <div style={{ display: "flex", gap: "10px" }}>
           <button style={buttonStyle} onClick={() => navigate("/")}>
             Home
