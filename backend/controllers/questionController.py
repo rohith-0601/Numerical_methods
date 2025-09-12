@@ -7,12 +7,6 @@ from gmpy2 import mpz, next_prime, is_prime
 sys.set_int_max_str_digits(20000)
 
 # -------- Q1: Kaprekar-like numbers --------
-from flask import Flask, Response, request
-import time
-import gmpy2
-
-app = Flask(__name__)
-
 def kaprekar_number(n: int) -> int:
     num = 0
     for i in range(1, n + 1):
@@ -23,30 +17,23 @@ def kaprekar_number(n: int) -> int:
 
 def q1_stream(start=1000, end=3000):
     start_time = time.time()
-    found = False
-
     for n in range(start, end + 1):
         candidate = kaprekar_number(n)
         elapsed = round(time.time() - start_time, 2)
-        # Send progress
+
+        # send progress first
         yield f"data: {{\"current_n\": {n}, \"runtime_seconds\": {elapsed}}}\n\n"
+        time.sleep(0)  # force flush to client
+
+        # check if prime
         if gmpy2.is_prime(candidate):
+            elapsed = round(time.time() - start_time, 2)
             yield f"data: {{\"found\": true, \"n\": {n}, \"kaprekar_number\": \"{candidate}\", \"runtime_seconds\": {elapsed}}}\n\n"
-            found = True
-            break
+            return
 
-    if not found:
-        elapsed = round(time.time() - start_time, 2)
-        yield f"data: {{\"found\": false, \"message\": \"No number found\", \"runtime_seconds\": {elapsed}}}\n\n"
-
-@app.route("/api/q1/stream")
-def api_q1_stream():
-    try:
-        start = int(request.args.get("start", 1000))
-        end = int(request.args.get("end", 3000))
-    except ValueError:
-        start, end = 1000, 3000
-    return Response(q1_stream(start=start, end=end), mimetype="text/event-stream")
+    # if none found
+    elapsed = round(time.time() - start_time, 2)
+    yield f"data: {{\"found\": false, \"runtime_seconds\": {elapsed}}}\n\n"
 
 # -------- Q2: Repunit primes --------
 def repunit(n):
@@ -63,7 +50,6 @@ def q2(start=2, end=1040):
     return {"repunit_primes": repunit_primes, "runtime_seconds": elapsed}
 
 # -------- Q3: Mersenne primes --------
-# questionController.py
 LAST_Q3 = None
 
 def lucas_lehmer(p):
@@ -76,33 +62,23 @@ def lucas_lehmer(p):
     return s == 0
 
 def q3(start=2201, end=2300):
-    """
-    Find Mersenne primes for p in the range [start, end)
-    """
     global LAST_Q3
     start_time = time.time()
     mersenne_primes = []
-
     for p in range(start, end):
         if gmpy2.is_prime(p) and lucas_lehmer(p):
             M = gmpy2.mpz(2)**p - 1
             mersenne_primes.append({"p": p, "mersenne_number": str(M)})
-
     elapsed = round(time.time() - start_time, 2)
     result = {"mersenne_primes": mersenne_primes, "runtime_seconds": elapsed}
     LAST_Q3 = result
     return result
 
-
-# -------- Q4: Brocard's conjecture using Q3 results --------
+# -------- Q4: Brocard's conjecture using Q3 --------
 from flask import request
-from gmpy2 import mpz, next_prime
-import time
 
 def q4():
     start_time = time.time()
-
-    # Get optional query parameters
     try:
         M1_input = request.args.get("startP")
         M2_input = request.args.get("endP")
@@ -127,76 +103,50 @@ def q4():
     while candidate < high and len(primes) < 4:
         primes.append(candidate)
         candidate = next_prime(candidate)
-
     elapsed = round(time.time() - start_time, 2)
     return {"primes": [str(p) for p in primes], "runtime_seconds": elapsed}
 
-# -------- Q5: Palindromic prime >=50 digits --------
+# -------- Q5: Palindromic prime ≥ 50 digits --------
 def generate_palindrome(length):
-    """
-    Generate odd-length palindromes of given length.
-    Yields gmpy2.mpz integers.
-    """
     half = (length + 1) // 2
     start = 10 ** (half - 1)
     end = 10 ** half
     for i in range(start, end):
         s = str(i)
-        pal = s + s[-2::-1]  # construct odd-length palindrome
+        pal = s + s[-2::-1]
         yield mpz(pal)
 
 def q5(min_digits=50):
-    """
-    Find the first palindromic prime with at least min_digits.
-    Returns a dictionary with the palindrome, number of digits, and runtime.
-    """
     start_time = time.time()
     length = min_digits if min_digits % 2 == 1 else min_digits + 1
-
     while True:
         for pal in generate_palindrome(length):
             if is_prime(pal):
                 elapsed = round(time.time() - start_time, 2)
-                return {
-                    "palindromic_prime": str(pal),
-                    "digits": len(str(pal)),
-                    "runtime_seconds": elapsed
-                }
+                return {"palindromic_prime": str(pal), "digits": len(str(pal)), "runtime_seconds": elapsed}
         length += 2
 
 # -------- Q6: Perfect numbers from Mersenne primes --------
 def q6():
     start_time = time.time()
-
-    # Get p values from query string, e.g., "2203,2281"
     p_values_str = request.args.get("p_values", None)
     mersennes = []
-
     if p_values_str:
         try:
-            # Convert comma-separated string to list of integers
             p_list = [int(p.strip()) for p in p_values_str.split(",")]
             for p in p_list:
-                M_p = mpz(2) ** p - 1
+                M_p = mpz(2)**p - 1
                 mersennes.append({"p": p, "mersenne_number": str(M_p)})
         except ValueError:
-            # Invalid input, fallback to LAST_Q3
             if LAST_Q3 and LAST_Q3.get("mersenne_primes"):
                 mersennes = LAST_Q3["mersenne_primes"]
             else:
-                mersennes = [
-                    {"p": 2, "mersenne_number": str(mpz(2)**2 - 1)},
-                    {"p": 3, "mersenne_number": str(mpz(2)**3 - 1)}
-                ]
+                mersennes = [{"p": 2, "mersenne_number": str(mpz(2)**2 - 1)}, {"p": 3, "mersenne_number": str(mpz(2)**3 - 1)}]
     else:
-        # No input provided, use LAST_Q3 or default small Mersenne primes
         if LAST_Q3 and LAST_Q3.get("mersenne_primes"):
             mersennes = LAST_Q3["mersenne_primes"]
         else:
-            mersennes = [
-                {"p": 2, "mersenne_number": str(mpz(2)**2 - 1)},
-                {"p": 3, "mersenne_number": str(mpz(2)**3 - 1)}
-            ]
+            mersennes = [{"p": 2, "mersenne_number": str(mpz(2)**2 - 1)}, {"p": 3, "mersenne_number": str(mpz(2)**3 - 1)}]
 
     perfect_numbers = []
     for item in mersennes:
@@ -204,15 +154,11 @@ def q6():
         M_p = mpz(item["mersenne_number"])
         N = (1 << (p - 1)) * M_p
         perfect_numbers.append({"p": p, "perfect_number": str(N)})
-
     elapsed = round(time.time() - start_time, 2)
     return {"perfect_numbers": perfect_numbers, "runtime_seconds": elapsed}
 
-# -------- Q7: Goldbach Conjecture for 50+ digit even numbers --------
+# -------- Q7: Goldbach Conjecture --------
 def q7(N1=None, N2=None):
-    from sympy import isprime, nextprime
-    import time
-
     start_time = time.time()
 
     def goldbach_pair(N: int):
@@ -225,12 +171,10 @@ def q7(N1=None, N2=None):
             p = nextprime(p)
         return None
 
-    # Use provided inputs if given, otherwise default
     if N1 is None:
         N1 = 10 ** 49 + 12
     else:
         N1 = int(N1)
-
     if N2 is None:
         N2 = 10 ** 50 + 88
     else:
@@ -239,10 +183,11 @@ def q7(N1=None, N2=None):
     pair1 = goldbach_pair(N1)
     pair2 = goldbach_pair(N2)
     elapsed = round(time.time() - start_time, 2)
-
     return {
         "numbers": [str(N1), str(N2)],
-        "pairs": [[str(pair1[0]), str(pair1[1])], [str(pair2[0]), str(pair2[1])]],
+        "pairs": [
+            [str(pair1[0]) if pair1 else None, str(pair1[1]) if pair1 else None],
+            [str(pair2[0]) if pair2 else None, str(pair2[1]) if pair2 else None]
+        ],
         "runtime_seconds": elapsed
     }
-

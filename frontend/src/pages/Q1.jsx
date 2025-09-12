@@ -22,6 +22,15 @@ function Q1() {
     return () => clearInterval(timer);
   }, [loading]);
 
+  // Cleanup EventSource on unmount
+  useEffect(() => {
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+  }, [eventSource]);
+
   const runCode = () => {
     if (!rangeStart || !rangeEnd) {
       toast.error("Please enter both start and end values.");
@@ -30,6 +39,11 @@ function Q1() {
     if (rangeStart > rangeEnd) {
       toast.error("Start must be less than or equal to End.");
       return;
+    }
+
+    // Close existing EventSource if any
+    if (eventSource) {
+      eventSource.close();
     }
 
     setData(null);
@@ -43,8 +57,10 @@ function Q1() {
 
     source.onmessage = (e) => {
       const parsed = JSON.parse(e.data);
+
       if (parsed.found) {
         setData(parsed);
+        setTimeElapsed(parsed.runtime_seconds);
         setLoading(false);
         source.close();
       } else if (parsed.current_n) {
@@ -60,6 +76,7 @@ function Q1() {
       console.error("EventSource failed:", err);
       setLoading(false);
       source.close();
+      toast.error("Stream connection failed.");
     };
   };
 
@@ -77,14 +94,6 @@ def kaprekar_number(n: int) -> int:
     for i in range(n - 1, 0, -1):
         num = num * (10 ** len(str(i))) + i
     return num
-
-start_time = time.time()
-for n in range(1000, 3001):
-    candidate = kaprekar_number(n)
-    if gmpy2.is_prime(candidate):
-        elapsed = time.time() - start_time
-        print(f"n = {n}, Kaprekar number = {candidate}, runtime = {elapsed:.2f}s")
-        break
 `;
 
   const questionText = `A prime number is generated using a Kaprekar pattern:
@@ -118,7 +127,6 @@ Find the next number that follows this pattern.`;
     >
       <h1>Question 1</h1>
 
-      {/* Question Box */}
       <div
         style={{
           backgroundColor: "#c19a83ff",
@@ -190,7 +198,6 @@ Find the next number that follows this pattern.`;
             </label>
           </div>
 
-          {/* Run Code Button */}
           <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
             <button onClick={runCode} style={navButtonStyle}>
               Run Code
@@ -208,7 +215,6 @@ Find the next number that follows this pattern.`;
             fontFamily: "monospace",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "flex-start",
           }}
         >
           {loading ? (

@@ -19,6 +19,8 @@ def api_q1_stream():
         start, end = end, start
 
     return Response(q1_stream(start=start, end=end), mimetype="text/event-stream")
+
+    return Response(q1_stream(start=start, end=end), mimetype="text/event-stream")
 @app.route("/api/q2")
 def api_q2():
     start = int(request.args.get("start", 2))
@@ -57,4 +59,4 @@ def api_q7():
     return jsonify(q7(N1, N2))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,port=5000)
