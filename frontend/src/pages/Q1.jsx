@@ -30,7 +30,6 @@ function Q1() {
       }
     };
   }, [eventSource]);
-
   const runCode = () => {
     if (!rangeStart || !rangeEnd) {
       toast.error("Please enter both start and end values.");
